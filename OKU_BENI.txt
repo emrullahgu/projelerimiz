@@ -150,7 +150,7 @@ MÜHENDİSLİK KABULLERİ (sahada / işverenle teyit edilmelidir)
 
 GITHUB
 ------
-Paket (DWG ler hariç - GitHub 100 MB dosya sınırı) özel depoda: https://github.com/emrullahgu/projelerimiz
+Paket (DWG ler hariç - GitHub 100 MB dosya sınırı) herkese açık depoda: https://github.com/emrullahgu/projelerimiz
 
 KAYNAK
 ------

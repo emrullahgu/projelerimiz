@@ -96,7 +96,7 @@ for s in [
 w('')
 w('GITHUB')
 w('------')
-w('Paket (DWG ler hariç - GitHub 100 MB dosya sınırı) özel depoda: https://github.com/emrullahgu/projelerimiz')
+w('Paket (DWG ler hariç - GitHub 100 MB dosya sınırı) herkese açık depoda: https://github.com/emrullahgu/projelerimiz')
 w('')
 w('KAYNAK')
 w('------')
