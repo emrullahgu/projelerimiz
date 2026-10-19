@@ -1,0 +1,426 @@
+;;; ==========================================================================
+;;; CLD_P2_09_AYDINLATMA_HESABI.lsp
+;;; PARSEL 2 - AYDINLATMA HESABI (TS EN 12464-1)
+;;; Isveren : BROSCO ITHALAT IHRACAT VE TICARET ANONIM SIRKETI
+;;; Konum   : YUKARI MAHALLE / KEMALPASA / IZMIR
+;;; Kaynak  : BROSCO 2 NOLU PARSEL MIMARI.dwg (mimari paftalar)
+;;; Kullanim: APPLOAD ile yukleyin -> cizim otomatik olusur.
+;;;          Yeniden cizmek icin komut: CLD_P2_AYDHESABI
+;;;          Tum ciktilar "CLD-P2-AYH-*" katmanlarindadir; yeniden calistirmada bu katmanlar temizlenir.
+;;;          Guvenlik uyarisi gelirse "Bir kez yukle" deyin veya klasoru Secenekler > Dosyalar >
+;;;          Guvenilen Konumlar (TRUSTEDPATHS) listesine ekleyin.
+;;; Uretici : CLD (Claude) otomatik muhendislik motoru - tum isimler CLD onekli.
+;;;   Mimari: 2 kat, 12 mahal, kat kotlari ZK=+0.00, 1K=+3.00, bina yuksekligi 11.21 m
+;;;   Elektrik: kurulu 238.6 kW, talep 148.5 kW, trafo 250 kVA, KMP 90 kVAr, jenerator 45 kVA
+;;;   Aydinlatma: 107 armatur, 29 priz/cikis, 46 linye, 8 pano
+;;;   Topraklama: R=0.97 ohm (birlesik), paratoner LPL I, 27 inis
+;;;   Mekanik: VRF 4.4 kW ic unite, dis unite 5.0 kW
+;;;   Sihhi: 12 armatur, 1 pis su kolonu, 14 yagmur inisi
+;;; ==========================================================================
+
+;;; ==========================================================================
+;;; CLD CORE  -  ortak cizim altyapisi (katman, stil, varlik, tablo, oynatici)
+;;; Tum isimler CLD onekli. ActiveX (vla-) kullanilmaz: AutoCAD / BricsCAD /
+;;; accoreconsole uyumlu saf AutoLISP + entmake.
+;;; Mimari paftalar WCS XZ duzleminde (ekstruzyon 0,-1,0) cizildiginden tum
+;;; varliklar ayni duzlemde (*cld-ext*) uretilir; koordinatlar pafta (OCS)
+;;; koordinatidir.
+;;; ==========================================================================
+
+(setq *cld-ver* "1.0")
+(if (not *cld-ext*) (setq *cld-ext* '(0.0 0.0 1.0)))
+(if (not *cld-u*) (setq *cld-u* 100.0))
+
+;;; ---------------------------------------------------------------- yardimci
+(defun cld:m (x) (* x *cld-u*))
+(defun cld:3d (p) (list (float (car p)) (float (cadr p)) 0.0))
+(defun cld:2d (p) (list (float (car p)) (float (cadr p))))
+(defun cld:pxy (p dx dy) (list (+ (car p) dx) (+ (cadr p) dy)))
+(defun cld:wcs (p) (trans (cld:3d p) *cld-ext* 0))
+(defun cld:top (lay) (/= lay "0"))
+(defun cld:x210 (lay) (if (cld:top lay) (list (cons 210 *cld-ext*) '(410 . "Model")) '()))
+;; renk / cizgi tipi / kalinlik her zaman acik yazilir: cizimdeki CECOLOR / CELTYPE / CELWEIGHT ne olursa olsun
+;; katmandan (ByLayer) gelir; blok icindekiler ByBlock
+(defun cld:col (lay)
+  (if (= lay "0") '((62 . 0) (6 . "ByBlock") (370 . -2)) '((62 . 256) (6 . "ByLayer") (370 . -1))))
+(defun cld:dlen (s / n i)
+  ;; gorunen karakter sayisi (\U+XXXX = 1 karakter)
+  (setq n 0 i 1)
+  (while (<= i (strlen s))
+    (if (and (= (substr s i 3) "\\U+") (<= (+ i 6) (strlen s))) (setq i (+ i 7)) (setq i (1+ i)))
+    (setq n (1+ n)))
+  n)
+(defun cld:maxl (l) (if l (apply 'max l) 0))
+(defun cld:sum (l) (apply '+ (cons 0 l)))
+(defun cld:nth-or (i l def) (if (and l (< i (length l))) (nth i l) def))
+(defun cld:range (n / i r) (setq i (1- n)) (while (>= i 0) (setq r (cons i r) i (1- i))) r)
+
+;;; ------------------------------------------------------ tablo kayitlari
+(defun cld:ltype (nm desc dash gap / sc)
+  (if (not (tblsearch "LTYPE" nm))
+    (progn
+      (setq sc (max 1e-6 (getvar "LTSCALE")))
+      (entmake (list '(0 . "LTYPE") '(100 . "AcDbSymbolTableRecord") '(100 . "AcDbLinetypeTableRecord")
+                     (cons 2 nm) '(70 . 0) (cons 3 desc) '(72 . 65) '(73 . 2)
+                     (cons 40 (/ (+ dash gap) sc)) (cons 49 (/ dash sc)) '(74 . 0) (cons 49 (- (/ gap sc))) '(74 . 0)))))
+  nm)
+(defun cld:style ()
+  (if (not (tblsearch "STYLE" "CLD_YAZI"))
+    (entmake '((0 . "STYLE") (100 . "AcDbSymbolTableRecord") (100 . "AcDbTextStyleTableRecord")
+               (2 . "CLD_YAZI") (70 . 0) (40 . 0.0) (41 . 0.85) (50 . 0.0) (71 . 0) (42 . 2.5)
+               (3 . "arial.ttf") (4 . ""))))
+  "CLD_YAZI")
+(defun cld:lay (nm col lt lw / e ed)
+  (if (not (tblsearch "LAYER" nm))
+    (entmake (list '(0 . "LAYER") '(100 . "AcDbSymbolTableRecord") '(100 . "AcDbLayerTableRecord")
+                   (cons 2 nm) '(70 . 0) (cons 62 col)
+                   (cons 6 (if (and lt (tblsearch "LTYPE" lt)) lt "Continuous"))
+                   (cons 370 lw)))
+    (progn
+      (setq e (tblobjname "LAYER" nm) ed (entget e))
+      (setq ed (subst (cons 70 0) (assoc 70 ed) ed))
+      (setq ed (subst (cons 62 col) (assoc 62 ed) ed))
+      (if (and lt (tblsearch "LTYPE" lt) (assoc 6 ed)) (setq ed (subst (cons 6 lt) (assoc 6 ed) ed)))
+      (if (assoc 370 ed) (setq ed (subst (cons 370 lw) (assoc 370 ed) ed)))
+      (entmod ed)))
+  nm)
+
+;;; ---------------------------------------------------- varlik olusturucular
+;;; lay "0" = blok tanimi icerigi (BYBLOCK renk, blok koordinati)
+(defun cld:e-line (a b lay)
+  (append (list '(0 . "LINE") (cons 8 lay)) (cld:col lay)
+          (if (cld:top lay) (list (cons 10 (cld:wcs a)) (cons 11 (cld:wcs b))) (list (cons 10 (cld:3d a)) (cons 11 (cld:3d b))))
+          (cld:x210 lay)))
+(defun cld:e-circle (c r lay)
+  (append (list '(0 . "CIRCLE") (cons 8 lay)) (cld:col lay) (list (cons 10 (cld:3d c)) (cons 40 r)) (cld:x210 lay)))
+(defun cld:e-arc (c r a1 a2 lay)
+  (append (list '(0 . "ARC") (cons 8 lay)) (cld:col lay) (list (cons 10 (cld:3d c)) (cons 40 r) (cons 50 a1) (cons 51 a2)) (cld:x210 lay)))
+(defun cld:e-pl (pts closed w lay)
+  (append (list '(0 . "LWPOLYLINE") '(100 . "AcDbEntity") (cons 8 lay)) (cld:col lay)
+          (list '(100 . "AcDbPolyline") (cons 90 (length pts)) (cons 70 (+ (if closed 1 0) (if (cld:top lay) 128 0))) (cons 43 w) '(38 . 0.0))
+          (mapcar '(lambda (p) (cons 10 (cld:2d p))) pts)
+          (cld:x210 lay)))
+(defun cld:e-dot (c r lay)
+  (append (list '(0 . "LWPOLYLINE") '(100 . "AcDbEntity") (cons 8 lay)) (cld:col lay)
+          (list '(100 . "AcDbPolyline") '(90 . 2) '(70 . 1) (cons 43 r) '(38 . 0.0)
+                (cons 10 (list (- (car c) (/ r 2.0)) (cadr c))) '(42 . 1.0)
+                (cons 10 (list (+ (car c) (/ r 2.0)) (cadr c))) '(42 . 1.0))
+          (cld:x210 lay)))
+(defun cld:e-solid (p1 p2 p3 p4 lay)
+  (append (list '(0 . "SOLID") (cons 8 lay)) (cld:col lay)
+          (list (cons 10 (cld:3d p1)) (cons 11 (cld:3d p2)) (cons 12 (cld:3d p4)) (cons 13 (cld:3d p3)))
+          (cld:x210 lay)))
+(defun cld:e-text (p h s j lay / ed p3)
+  ;; j: 0 sol-taban, 1 orta-taban, 2 sag-taban, 4 orta-orta, 7 sol-orta, 9 sag-orta
+  (setq p3 (cld:3d p))
+  (setq ed (append (list '(0 . "TEXT") (cons 8 lay)) (cld:col lay)
+                   (list (cons 7 (cld:style)) (cons 10 p3) (cons 40 h) (cons 1 s) '(50 . 0.0) '(41 . 0.85))))
+  (setq ed (cond ((= j 1) (append ed (list '(72 . 1) (cons 11 p3) '(73 . 0))))
+                 ((= j 2) (append ed (list '(72 . 2) (cons 11 p3) '(73 . 0))))
+                 ((= j 4) (append ed (list '(72 . 1) (cons 11 p3) '(73 . 2))))
+                 ((= j 7) (append ed (list '(72 . 0) (cons 11 p3) '(73 . 2))))
+                 ((= j 9) (append ed (list '(72 . 2) (cons 11 p3) '(73 . 2))))
+                 (T ed)))
+  (append ed (cld:x210 lay)))
+(defun cld:e-ins (blk p sc rot lay)
+  (append (list '(0 . "INSERT") (cons 8 lay)) (cld:col lay) (list (cons 2 blk) (cons 10 (cld:3d p))
+                (cons 41 sc) (cons 42 sc) (cons 43 sc) (cons 50 rot))
+          (cld:x210 lay)))
+(defun cld:line (a b lay) (entmake (cld:e-line a b lay)))
+(defun cld:pl (pts closed w lay) (if (cdr pts) (entmake (cld:e-pl pts closed w lay))))
+(defun cld:txt (p h s j lay) (entmake (cld:e-text p h s j lay)))
+(defun cld:rect (p1 p2 lay) (cld:pl (list p1 (list (car p2) (cadr p1)) p2 (list (car p1) (cadr p2))) T 0.0 lay))
+
+;;; ------------------------------------------------------------ blok tanimi
+(defun cld:defblk (name ents)
+  (if (not (tblsearch "BLOCK" name))
+    (progn
+      (entmake (list '(0 . "BLOCK") (cons 2 name) '(70 . 0) '(10 0.0 0.0 0.0) '(8 . "0")))
+      (foreach e ents (entmake e))
+      (entmake '((0 . "ENDBLK") (8 . "0")))))
+  name)
+
+;;; mimari altlik blogu: plines ((kapali (x y) (x y) ...) ...)  texts ((x y h "yazi") ...)
+(defun cld:defblk-bg (name plines texts)
+  (if (not (tblsearch "BLOCK" name))
+    (progn
+      (entmake (list '(0 . "BLOCK") (cons 2 name) '(70 . 0) '(10 0.0 0.0 0.0) '(8 . "0")))
+      (foreach p plines (if (cddr p) (entmake (cld:e-pl (cdr p) (car p) 0.0 "0"))))
+      (foreach s texts (entmake (cld:e-text (list (car s) (cadr s)) (caddr s) (cadddr s) 4 "0")))
+      (entmake '((0 . "ENDBLK") (8 . "0")))))
+  name)
+
+;;; ------------------------------------------------------------------ tablo
+;;; rows: ((hucre ...) ...)  ilk satir baslik. Sutun genislikleri otomatik.
+(defun cld:table (org title rows h lay / ncol widths rh y x w i r cw tw pad s)
+  (setq pad (* 0.6 h) rh (* 2.0 h))
+  (setq ncol (cld:maxl (mapcar 'length rows)))
+  (setq widths (mapcar '(lambda (c)
+                          (+ (* 2 pad) (* 0.66 h (cld:maxl (mapcar '(lambda (r) (cld:dlen (cld:nth-or c r ""))) rows)))))
+                       (cld:range ncol)))
+  (setq tw (cld:sum widths) x (car org) y (cadr org))
+  (if (and title (/= title ""))
+    (progn
+      (cld:rect (list x y) (list (+ x tw) (- y (* 1.5 rh))) lay)
+      (cld:txt (list (+ x pad) (- y (* 0.75 rh))) (* 1.3 h) title 7 lay)
+      (setq y (- y (* 1.5 rh)))))
+  (setq i 0)
+  (foreach r rows
+    (setq x (car org) cw 0)
+    (cld:rect (list x y) (list (+ x tw) (- y rh)) lay)
+    (foreach w widths
+      (if (> cw 0) (cld:line (list x y) (list x (- y rh)) lay))
+      (setq s (cld:nth-or cw r ""))
+      (if (/= s "") (cld:txt (list (+ x pad) (- y (* 0.5 rh))) h s 7 lay))
+      (setq x (+ x w) cw (1+ cw)))
+    (if (= i 0) (cld:pl (list (list (car org) (- y rh)) (list (+ (car org) tw) (- y rh))) nil (* 0.12 h) lay))
+    (setq y (- y rh) i (1+ i)))
+  (list (- y (* 2.0 h)) tw))
+(defun cld:notes (org title lines h lay / y)
+  (setq y (cadr org))
+  (if (and title (/= title "")) (progn (cld:txt (list (car org) y) (* 1.3 h) title 0 lay) (setq y (- y (* 2.2 h)))))
+  (foreach s lines (cld:txt (list (car org) y) h s 0 lay) (setq y (- y (* 1.7 h))))
+  (- y h))
+
+;;; ------------------------------------------------------------- oynatici
+;;; Hesap motorunun urettigi cizim komutlari:
+;;;  ("LY" ad renk cizgitipi kalinlik)        katman
+;;;  ("I" lay blok x y aci olcek)             sembol (olcek * *cld-u*)
+;;;  ("L" lay x1 y1 x2 y2)                    cizgi
+;;;  ("P" lay kapali genislik ((x y) ...))    polyline
+;;;  ("C" lay x y r)                          daire
+;;;  ("D" lay x y r)                          dolu daire
+;;;  ("T" lay x y h hiza "yazi")              yazi
+;;;  ("TB" lay x y h "baslik" satirlar)       tablo
+;;;  ("NT" lay x y h "baslik" satirlar)       not blogu
+(defun cld:op (o / k)
+  (setq k (car o))
+  (cond ((= k "I") (entmake (cld:e-ins (nth 2 o) (list (nth 3 o) (nth 4 o)) (* (nth 6 o) *cld-u*) (nth 5 o) (nth 1 o))))
+        ((= k "L") (cld:line (list (nth 2 o) (nth 3 o)) (list (nth 4 o) (nth 5 o)) (nth 1 o)))
+        ((= k "P") (cld:pl (nth 4 o) (nth 2 o) (nth 3 o) (nth 1 o)))
+        ((= k "C") (entmake (cld:e-circle (list (nth 2 o) (nth 3 o)) (nth 4 o) (nth 1 o))))
+        ((= k "D") (entmake (cld:e-dot (list (nth 2 o) (nth 3 o)) (nth 4 o) (nth 1 o))))
+        ((= k "T") (cld:txt (list (nth 2 o) (nth 3 o)) (nth 4 o) (nth 6 o) (nth 5 o) (nth 1 o)))
+        ((= k "TB") (cld:table (list (nth 2 o) (nth 3 o)) (nth 5 o) (nth 6 o) (nth 4 o) (nth 1 o)))
+        ((= k "NT") (cld:notes (list (nth 2 o) (nth 3 o)) (nth 5 o) (nth 6 o) (nth 4 o) (nth 1 o)))
+        ((= k "LY") (cld:lay (nth 1 o) (nth 2 o) (nth 3 o) (nth 4 o)))
+        ((= k "BK") (cld:defblk-bg (nth 1 o) (nth 2 o) (nth 3 o)))))
+(defun cld:play (ops / r)
+  (foreach o ops
+    (setq r (vl-catch-all-apply 'cld:op (list o)))
+    (cond ((vl-catch-all-error-p r) (setq *cld-bad* (cons (list (car o) (nth 1 o) (vl-catch-all-error-message r)) *cld-bad*)))
+          ((and (null r) (or (member (car o) '("I" "L" "C" "D" "T")) (and (= (car o) "P") (cdr (nth 4 o)))))
+           (setq *cld-bad* (cons (list (car o) (nth 1 o) (if (= (car o) "I") (nth 2 o) "")) *cld-bad*)))
+          (T (setq *cld-n* (1+ *cld-n*))))))
+
+;;; ------------------------------------------------------- calisma ortami
+(defun cld:clear (pat / ss i n)
+  (setq n 0)
+  (if (setq ss (ssget "_X" (list (cons 8 pat))))
+    (progn (setq i 0) (while (< i (sslength ss)) (entdel (ssname ss i)) (setq i (1+ i) n (1+ n)))))
+  n)
+(defun cld:begin (pat)
+  (setq *cld-old* (list (getvar "CMDECHO") (getvar "OSMODE")) *cld-n* 0 *cld-bad* nil)
+  (setvar "CMDECHO" 0)
+  (setvar "OSMODE" 0)
+  ;; cizim model alaninda olusur (bir yerlesim sekmesi acik olsa bile)
+  (if (= 0 (getvar "TILEMODE")) (vl-catch-all-apply 'setvar (list "TILEMODE" 1)))
+  (vl-catch-all-apply 'command-s (list "_.UNDO" "_BEGIN"))
+  (cld:style)
+  (cld:ltype "CLD_KESIK" "CLD kesik __ __" (cld:m 0.30) (cld:m 0.15))
+  (cld:ltype "CLD_NOKTALI" "CLD noktali . . ." (cld:m 0.05) (cld:m 0.10))
+  (cld:ltype "CLD_UZUNKESIK" "CLD uzun kesik ____ ____" (cld:m 0.80) (cld:m 0.20)))
+;;; disiplin katmanlarinin kilidini kaldir / coz (eski cikti silinebilsin)
+(defun cld:unlock (pat / tl ed)
+  (setq tl (tblnext "LAYER" T))
+  (while tl
+    (if (and (wcmatch (cdr (assoc 2 tl)) pat) (/= 0 (logand 5 (cdr (assoc 70 tl)))))
+      (progn (setq ed (entget (tblobjname "LAYER" (cdr (assoc 2 tl)))))
+             (entmod (subst (cons 70 0) (assoc 70 ed) ed))))
+    (setq tl (tblnext "LAYER"))))
+(defun cld:restore ()
+  (vl-catch-all-apply 'command-s (list "_.UNDO" "_END"))
+  (if *cld-old* (progn (setvar "CMDECHO" (car *cld-old*)) (setvar "OSMODE" (cadr *cld-old*))))
+  (setq *cld-old* nil))
+(defun cld:first5 (l / r i) (setq i 0) (foreach x l (if (< i 5) (setq r (cons x r))) (setq i (1+ i))) (reverse r))
+(defun cld:end (msg)
+  (cld:restore)
+  (princ (strcat "\n" msg " (" (itoa *cld-n*) " varlik/komut)"))
+  (if *cld-bad*
+    (progn
+      (princ (strcat "\nCLD UYARI: " (itoa (length *cld-bad*)) " varlik olusturulamadi, ilkleri:"))
+      (foreach b (cld:first5 (reverse *cld-bad*)) (princ (strcat "\n   " (vl-princ-to-string b))))))
+  (princ))
+;;; acik cizim baska bir parsele mi ait? (dosya adinda baska parselin "<n> NOLU" ifadesi)
+(defun cld:wrong-dwg (parcel others / nm bad)
+  (setq nm (strcase (getvar "DWGNAME")))
+  (foreach o others (if (wcmatch nm (strcat "* " o " NOLU*,BROSCO " o " *,P" o ".DWG")) (setq bad T)))
+  (and bad (not (wcmatch nm (strcat "* " parcel " NOLU*,BROSCO " parcel " *,P" parcel ".DWG")))))
+(defun cld:err (m)
+  (cld:restore)
+  (if (not (member m '("Function cancelled" "quit / exit abort"))) (princ (strcat "\nCLD HATA: " m)))
+  (princ))
+
+
+;;; ==========================================================================
+;;; CLD SEMBOL KUTUPHANESI - bloklar 1 birim = 1 m tanimlanir, cizime
+;;; (olcek x *cld-u*) ile yerlestirilir. Duvar sembollerinde duvar yerel x=0,
+;;; sembol +X yonune (mahal icine) bakar.
+;;; ==========================================================================
+
+(defun cld:b-box (w h)
+  (cld:e-pl (list (list (- (/ w 2)) (- (/ h 2))) (list (/ w 2) (- (/ h 2))) (list (/ w 2) (/ h 2)) (list (- (/ w 2)) (/ h 2))) T 0.0 "0"))
+(defun cld:b-wallbox (d w)
+  (cld:e-pl (list (list 0.0 (- (/ w 2))) (list d (- (/ w 2))) (list d (/ w 2)) (list 0.0 (/ w 2))) T 0.0 "0"))
+(defun cld:b-x (r)
+  (list (cld:e-line (list (- r) (- r)) (list r r) "0") (cld:e-line (list (- r) r) (list r (- r)) "0")))
+(defun cld:b-txt (p h s) (cld:e-text p h s 4 "0"))
+
+(defun cld:def-symbols ( / r)
+  ;; ---------------- AYDINLATMA
+  (setq r 0.12)
+  (cld:defblk "CLD_S_DL" (append (list (cld:e-circle '(0 0) r "0")) (cld:b-x (* r 0.707))))
+  (cld:defblk "CLD_S_DLB" (append (list (cld:e-circle '(0 0) r "0") (cld:e-circle '(0 0) (* r 1.35) "0")) (cld:b-x (* r 0.707))))
+  (cld:defblk "CLD_S_HB" (append (list (cld:e-circle '(0 0) 0.30 "0") (cld:e-circle '(0 0) 0.12 "0")) (cld:b-x 0.21)))
+  (cld:defblk "CLD_S_PNL" (append (list (cld:b-box 0.6 0.6)) (cld:b-x 0.3)))
+  (cld:defblk "CLD_S_ETJ" (list (cld:b-box 1.2 0.2) (cld:e-line '(-0.6 0.0) '(0.6 0.0) "0")
+                                (cld:e-line '(-0.5 -0.1) '(-0.5 0.1) "0") (cld:e-line '(0.5 -0.1) '(0.5 0.1) "0")))
+  (cld:defblk "CLD_S_PLF" (list (cld:e-circle '(0 0) 0.15 "0") (cld:e-dot '(0 0) 0.07 "0")))
+  (cld:defblk "CLD_S_ACIL" (list (cld:b-box 0.32 0.16) (cld:e-solid '(-0.16 -0.08) '(0.16 -0.08) '(0.16 0.08) '(0.16 0.08) "0")))
+  (cld:defblk "CLD_S_EXIT" (list (cld:b-box 0.40 0.20) (cld:e-line '(-0.14 0) '(0.12 0) "0") (cld:e-line '(0.12 0) '(0.04 0.06) "0")
+                                 (cld:e-line '(0.12 0) '(0.04 -0.06) "0")))
+  (cld:defblk "CLD_S_PRJ" (list (cld:e-pl '((-0.15 -0.10) (0.15 -0.10) (0.22 0.12) (-0.22 0.12)) T 0.0 "0") (cld:e-line '(-0.15 0.0) '(0.15 0.0) "0")))
+  (cld:defblk "CLD_S_BOLLARD" (list (cld:e-circle '(0 0) 0.12 "0") (cld:e-dot '(0 0) 0.12 "0")))
+  ;; ---------------- PRIZ / ANAHTAR (duvar sembolleri)
+  (cld:defblk "CLD_S_PRIZ" (list (cld:e-line '(0 0) '(0.06 0) "0") (cld:e-line '(0.06 -0.12) '(0.06 0.12) "0")
+                                 (cld:e-arc '(0.06 0) 0.12 (- (/ pi 2)) (/ pi 2) "0") (cld:e-line '(0.20 -0.10) '(0.20 0.10) "0")))
+  (cld:defblk "CLD_S_PRIZE" (list (cld:e-line '(0 0) '(0.06 0) "0") (cld:e-line '(0.06 -0.12) '(0.06 0.12) "0")
+                                  (cld:e-arc '(0.06 0) 0.12 (- (/ pi 2)) (/ pi 2) "0") (cld:e-dot '(0.11 0) 0.06 "0")
+                                  (cld:e-line '(0.20 -0.10) '(0.20 0.10) "0")))
+  (cld:defblk "CLD_S_PRIZU" (list (cld:e-line '(0 0) '(0.06 0) "0") (cld:e-line '(0.06 -0.12) '(0.06 0.12) "0")
+                                  (cld:e-arc '(0.06 0) 0.12 (- (/ pi 2)) (/ pi 2) "0") (cld:b-txt '(0.11 0) 0.09 "U")))
+  (cld:defblk "CLD_S_PRIZ3" (list (cld:e-line '(0 0) '(0.06 0) "0") (cld:e-line '(0.06 -0.14) '(0.06 0.14) "0")
+                                  (cld:e-arc '(0.06 0) 0.14 (- (/ pi 2)) (/ pi 2) "0")
+                                  (cld:e-line '(0.10 -0.06) '(0.18 -0.06) "0") (cld:e-line '(0.10 0.0) '(0.18 0.0) "0") (cld:e-line '(0.10 0.06) '(0.18 0.06) "0")))
+  (cld:defblk "CLD_S_PGRUP" (list (cld:b-box 0.50 0.30) (cld:e-arc '(-0.13 -0.02) 0.08 0.0 pi "0") (cld:e-arc '(0.0 -0.02) 0.08 0.0 pi "0")
+                                  (cld:e-arc '(0.13 -0.02) 0.08 0.0 pi "0") (cld:e-line '(-0.25 -0.08) '(0.25 -0.08) "0")))
+  (foreach c '(("CLD_S_CK_KLIMA" "K") ("CLD_S_CK_FIRIN" "F") ("CLD_S_CK_BULASIK" "B") ("CLD_S_CK_CAMASIR" "\\U+00C7")
+               ("CLD_S_CK_KURUTMA" "KM") ("CLD_S_CK_KOMBI" "KB") ("CLD_S_CK_DAVLUMBAZ" "D") ("CLD_S_CK_POMPA" "P")
+               ("CLD_S_CK_ASPIRATOR" "A") ("CLD_S_CK_ASANSOR" "AS") ("CLD_S_CK_SARJ" "EV") ("CLD_S_CK_ISITICI" "IS")
+               ("CLD_S_CK_TERMOSIFON" "TS") ("CLD_S_CK_MAKINE" "M"))
+    (cld:defblk (car c) (list (cld:b-wallbox 0.24 0.24) (cld:e-solid '(0 -0.12) '(0.08 -0.12) '(0.08 0.12) '(0 0.12) "0")
+                              (cld:b-txt '(0.16 0.0) 0.09 (cadr c)))))
+  (cld:defblk "CLD_S_ANH1" (list (cld:e-circle '(0.10 0) 0.05 "0") (cld:e-line '(0.135 0.035) '(0.25 0.15) "0") (cld:e-line '(0.25 0.15) '(0.29 0.11) "0")))
+  (cld:defblk "CLD_S_ANH2" (list (cld:e-circle '(0.10 0) 0.05 "0") (cld:e-line '(0.135 0.035) '(0.25 0.15) "0") (cld:e-line '(0.25 0.15) '(0.29 0.11) "0")
+                                 (cld:e-line '(0.135 -0.035) '(0.25 -0.15) "0") (cld:e-line '(0.25 -0.15) '(0.29 -0.11) "0")))
+  (cld:defblk "CLD_S_VAV" (list (cld:e-circle '(0.10 0) 0.05 "0") (cld:e-line '(0.135 0.035) '(0.25 0.15) "0") (cld:e-line '(0.25 0.15) '(0.29 0.11) "0")
+                                (cld:e-line '(0.065 -0.035) '(-0.05 -0.15) "0") (cld:e-line '(-0.05 -0.15) '(-0.09 -0.11) "0")))
+  (cld:defblk "CLD_S_BUAT" (list (cld:e-circle '(0 0) 0.05 "0")))
+  ;; ---------------- PANOLAR
+  (cld:defblk "CLD_S_TP" (list (cld:b-wallbox 0.16 0.50) (cld:e-solid '(0 -0.25) '(0.16 -0.25) '(0.16 0.25) '(0 -0.25) "0")))
+  (cld:defblk "CLD_S_ADP" (list (cld:b-wallbox 0.30 0.90) (cld:e-solid '(0 -0.45) '(0.30 -0.45) '(0.30 0.45) '(0 0.45) "0")))
+  (cld:defblk "CLD_S_KMP" (list (cld:b-wallbox 0.30 0.60) (cld:e-line '(0 -0.30) '(0.30 0.30) "0") (cld:b-txt '(0.15 -0.15) 0.10 "C")))
+  (cld:defblk "CLD_S_KOLON" (list (cld:e-circle '(0 0) 0.15 "0") (cld:e-line '(-0.106 -0.106) '(0.106 0.106) "0")
+                                  (cld:e-line '(0.106 0.106) '(0.02 0.106) "0") (cld:e-line '(0.106 0.106) '(0.106 0.02) "0")))
+  (cld:defblk "CLD_S_OAP" (list (cld:b-wallbox 0.20 0.60) (cld:e-solid '(0 -0.30) '(0.20 -0.30) '(0.20 0.0) '(0 0.0) "0")))
+  (cld:defblk "CLD_S_TRAFO" (list (cld:b-box 6.0 5.0) (cld:e-circle '(-0.45 0) 0.8 "0") (cld:e-circle '(0.45 0) 0.8 "0")))
+  (cld:defblk "CLD_S_JEN" (list (cld:b-box 4.0 1.6) (cld:e-circle '(-1.2 0) 0.55 "0") (cld:b-txt '(-1.2 0) 0.5 "G")))
+  ;; ---------------- TOPRAKLAMA / PARATONER
+  (cld:defblk "CLD_S_TOP_FILIZ" (list (cld:e-circle '(0 0) 0.15 "0") (cld:e-dot '(0 0) 0.12 "0")))
+  (cld:defblk "CLD_S_TOP_EPB" (list (cld:b-box 0.60 0.16) (cld:e-solid '(-0.30 -0.08) '(0.30 -0.08) '(0.30 0.08) '(-0.30 0.08) "0")
+                                    (cld:e-line '(-0.2 -0.08) '(-0.2 -0.25) "0") (cld:e-line '(0 -0.08) '(0 -0.25) "0") (cld:e-line '(0.2 -0.08) '(0.2 -0.25) "0")))
+  (cld:defblk "CLD_S_TOP_YEB" (list (cld:b-wallbox 0.10 0.30) (cld:e-solid '(0 -0.15) '(0.10 -0.15) '(0.10 0.15) '(0 0.15) "0")))
+  (cld:defblk "CLD_S_TOP_KAZIK" (list (cld:e-line '(0 0.20) '(0 0) "0") (cld:e-line '(-0.15 0) '(0.15 0) "0")
+                                      (cld:e-line '(-0.10 -0.05) '(0.10 -0.05) "0") (cld:e-line '(-0.05 -0.10) '(0.05 -0.10) "0")
+                                      (cld:e-circle '(0 0.05) 0.25 "0")))
+  (cld:defblk "CLD_S_TOP_OLCU" (append (list (cld:b-box 0.30 0.30)) (cld:b-x 0.15)))
+  (cld:defblk "CLD_S_PAR_UC" (list (cld:e-circle '(0 0) 0.20 "0") (cld:e-solid '(-0.12 -0.08) '(0.12 -0.08) '(0.0 0.14) '(0.0 0.14) "0")))
+  (cld:defblk "CLD_S_PAR_INIS" (list (cld:e-circle '(0 0) 0.15 "0") (cld:e-dot '(0 0) 0.08 "0")
+                                     (cld:e-line '(0.0 -0.15) '(0.0 -0.40) "0") (cld:e-line '(-0.08 -0.30) '(0.0 -0.40) "0") (cld:e-line '(0.08 -0.30) '(0.0 -0.40) "0")))
+  (cld:defblk "CLD_S_PAR_KLEMENS" (list (cld:b-box 0.25 0.25) (cld:e-solid '(-0.125 -0.125) '(0.125 -0.125) '(0.125 0.125) '(-0.125 -0.125) "0")))
+  ;; ---------------- MEKANIK
+  (cld:defblk "CLD_S_KASET" (append (list (cld:b-box 0.84 0.84) (cld:b-box 0.56 0.56)) (cld:b-x 0.28)))
+  (cld:defblk "CLD_S_VRFOUT" (list (cld:b-box 1.30 0.75) (cld:e-circle '(-0.3 0) 0.28 "0") (cld:e-circle '(0.3 0) 0.28 "0")))
+  (cld:defblk "CLD_S_HRV" (list (cld:b-box 1.40 0.80) (cld:e-line '(-0.7 -0.4) '(0.7 0.4) "0") (cld:e-line '(-0.7 0.4) '(0.7 -0.4) "0") (cld:b-txt '(0 0.25) 0.15 "HRV")))
+  (cld:defblk "CLD_S_MENFEZ" (append (list (cld:b-box 0.60 0.60) (cld:b-box 0.30 0.30)) (cld:b-x 0.30)))
+  (cld:defblk "CLD_S_EMIS" (list (cld:b-box 0.40 0.40) (cld:e-line '(-0.2 -0.1) '(0.2 -0.1) "0") (cld:e-line '(-0.2 0.0) '(0.2 0.0) "0") (cld:e-line '(-0.2 0.1) '(0.2 0.1) "0")))
+  (cld:defblk "CLD_S_CATIFAN" (list (cld:e-circle '(0 0) 0.60 "0") (cld:e-circle '(0 0) 0.15 "0") (cld:e-line '(0 0) '(0.5 0.25) "0")
+                                    (cld:e-line '(0 0) '(-0.5 0.25) "0") (cld:e-line '(0 0) '(0 -0.55) "0")))
+  (cld:defblk "CLD_S_PANJUR" (list (cld:b-wallbox 0.20 1.20) (cld:e-line '(0 -0.4) '(0.2 -0.3) "0") (cld:e-line '(0 0.0) '(0.2 0.1) "0") (cld:e-line '(0 0.4) '(0.2 0.5) "0")))
+  (cld:defblk "CLD_S_RADYANT" (list (cld:e-pl '((-3.0 -0.15) (3.0 -0.15) (3.0 0.15) (-3.0 0.15)) T 0.0 "0") (cld:e-line '(-3.0 0) '(2.6 0) "0") (cld:b-box 0.6 0.4)))
+  (cld:defblk "CLD_S_SIGFAN" (list (cld:b-box 0.80 0.60) (cld:e-circle '(0 0) 0.22 "0") (cld:b-txt '(0 -0.2) 0.10 "S")))
+  ;; ---------------- SIHHI TESISAT
+  (cld:defblk "CLD_S_PK" (append (list (cld:e-circle '(0 0) 0.10 "0")) (cld:b-x 0.07)))
+  (cld:defblk "CLD_S_TSK" (list (cld:e-circle '(0 0) 0.08 "0") (cld:e-dot '(0 0) 0.05 "0")))
+  (cld:defblk "CLD_S_YK" (list (cld:e-circle '(0 0) 0.10 "0") (cld:e-circle '(0 0) 0.05 "0")))
+  (cld:defblk "CLD_S_YS" (list (cld:b-box 0.18 0.18) (cld:e-circle '(0 0) 0.06 "0") (cld:e-line '(-0.06 0) '(0.06 0) "0")))
+  (cld:defblk "CLD_S_SUSAYAC" (list (cld:e-circle '(0 0) 0.12 "0") (cld:e-line '(-0.12 0) '(0.12 0) "0") (cld:b-txt '(0 0.05) 0.06 "m3")))
+  (cld:defblk "CLD_S_ROGAR" (list (cld:b-box 0.60 0.60) (cld:e-circle '(0 0) 0.22 "0")))
+  (cld:defblk "CLD_S_DEPO" (append (list (cld:b-box 1.20 0.80)) (list (cld:e-line '(-0.6 -0.4) '(0.6 0.4) "0") (cld:e-line '(-0.6 0.4) '(0.6 -0.4) "0"))))
+  (cld:defblk "CLD_S_KLOZET" (list (cld:e-pl '((-0.18 0.30) (0.18 0.30) (0.18 0.12) (-0.18 0.12)) T 0.0 "0")
+                                   (cld:e-circle '(0 -0.08) 0.18 "0")))
+  (cld:defblk "CLD_S_LAVABO" (list (cld:b-box 0.50 0.40) (cld:e-circle '(0 -0.03) 0.13 "0")))
+  (cld:defblk "CLD_S_ABDEST" (list (cld:b-box 0.40 0.30) (cld:e-circle '(0 0.05) 0.05 "0") (cld:e-line '(0 0.05) '(0 -0.12) "0")))
+  (cld:defblk "CLD_S_YD" (list (cld:b-wallbox 0.25 0.80) (cld:e-solid '(0 -0.40) '(0.25 -0.40) '(0.25 -0.10) '(0 -0.10) "0")
+                              (cld:b-txt '(0.125 0.15) 0.12 "YD")))
+  (cld:defblk "CLD_S_DUS" (append (list (cld:b-box 0.90 0.90) (cld:e-circle '(0 0) 0.06 "0")) (cld:b-x 0.45)))
+  T)
+
+
+(setq *cld-u* 100.0)
+(setq *cld-ext* (list 0.0 0.0 1.0))
+
+(defun cld:ops-p2_aydinlatma_hesabi-layers () (cld:play (quote (("LY" "CLD-P2-AYH-YAZI" 7 nil -3) ("LY" "CLD-P2-AYH-PAFTA" 7 nil 50) ("LY" "CLD-P2-AYH-ALTLIK" 8 nil 13) ("LY" "CLD-P2-AYH-TABLO" 7 nil -3)))))
+(defun cld:ops-p2_aydinlatma_hesabi-1 () (cld:play (quote (
+   ("T" "CLD-P2-AYH-YAZI" 97243.5 -202229.3 160.0 0 "PARSEL 2 - AYDINLATMA HESABI (TS EN 12464-1)")
+   ("T" "CLD-P2-AYH-YAZI" 97243.5 -202459.3 50.0 0 "BROSCO \\U+0130THALAT \\U+0130HRACAT VE T\\U+0130CARET ANON\\U+0130M \\U+015E\\U+0130RKET\\U+0130 - YUKARI MAHALLE / KEMALPA\\U+015EA / \\U+0130ZM\\U+0130R")
+   ("T" "CLD-P2-AYH-YAZI" 97243.5 -202539.3 38.0 0 "CLD otomatik proje  |  Disiplin 09  |  19.10.2026  |  Paftalar 1/100  |  Katman \\U+00F6neki CLD-P2-AYH-*")
+   ("TB" "CLD-P2-AYH-TABLO" 97243.5 -202979.3 25.0 "AYDINLATMA HESAP TABLOSU (L\\U+00FCmen metodu)" (("KAT" "MAHAL" "ALAN (m\\U+00B2)" "h (m)" "hm (m)" "k" "\\U+03B7" "MF" "Em (lx)" "ARMAT\\U+00DCR" "\\U+03A6 (lm)" "N hesap" "N se\\U+00E7ilen" "E (lx)" "W/m\\U+00B2" "DURUM") ("ZK" "BAY WC" "1,5" "2,70" "1,85" "0,32" "0,36" "0,80" "200" "DLB" "1.200" "0,9" "1" "232" "8,1" "UYGUN") ("ZK" "BAYAN WC" "1,5" "2,70" "1,85" "0,32" "0,36" "0,80" "200" "DLB" "1.200" "0,9" "1" "232" "8,1" "UYGUN") ("ZK" "\\U+00C7\\U+00D6P ODASI" "2,1" "2,70" "1,85" "0,43" "0,36" "0,70" "100" "ETJ" "4.000" "0,2" "1" "480" "17,1" "UYGUN") ("ZK" "G\\U+00DCV. HOL\\U+00DC" "2,1" "2,70" "1,85" "0,27" "0,36" "0,80" "100" "DL" "1.800" "0,4" "1" "251" "8,7" "UYGUN") ("ZK" "JENARAT\\U+00D6R ODASI" "1,5" "2,70" "1,85" "0,33" "0,36" "0,70" "200" "ETJ" "4.000" "0,3" "1" "672" "24,0" "UYGUN") ("ZK" "SI\\U+011EINAK" "15,5" "2,70" "1,85" "0,72" "0,41" "0,70" "100" "ETJ" "4.000" "1,4" "2" "147" "4,6" "UYGUN") ("ZK" "\\U+00DCRET\\U+0130M ALANI" "1.005,3" "10,01" "8,66" "1,40" "0,57" "0,70" "300" "HB" "21.000" "35,8" "36" "302" "5,4" "UYGUN") ("ZK" "\\U+00DCRET\\U+0130M ALANI" "1.009,7" "10,01" "8,66" "1,50" "0,59" "0,70" "300" "HB" "21.000" "34,9" "35" "301" "5,2" "UYGUN") ("1K" "ABDESTHANE" "1,9" "2,70" "1,85" "0,41" "0,36" "0,80" "200" "DLB" "1.200" "1,1" "2" "364" "12,6" "UYGUN") ("1K" "ABDESTHANE" "1,6" "2,70" "1,85" "0,25" "0,36" "0,80" "200" "DLB" "1.200" "1,0" "1" "210" "7,3" "UYGUN") ("1K" "KADIN MESC\\U+0130T" "15,0" "2,80" "1,95" "0,77" "0,43" "0,80" "200" "DL" "1.800" "4,8" "5" "206" "6,0" "UYGUN") ("1K" "ERKEK MESC\\U+0130T" "15,9" "2,80" "1,95" "0,80" "0,44" "0,80" "200" "DL" "1.800" "5,0" "5" "199" "5,7" "UYGUN")))
+   ("TB" "CLD-P2-AYH-TABLO" 97243.5 -204004.3 25.0 "ARMAT\\U+00DCR L\\U+0130STES\\U+0130" (("KOD" "A\\U+00C7IKLAMA" "ADET" "G\\U+00DC\\U+00C7 (W)") ("HB" "LED y\\U+00FCksek tavan (highbay) armat\\U+00FCr\\U+00FC 150 W, 21.000 lm, IP65" "71" "10.650") ("DL" "LED downlight 18 W, 1.800 lm, IP20" "11" "198") ("DLB" "LED downlight 12 W, 1.200 lm, IP44 (\\U+0131slak hacim)" "5" "60") ("ETJ" "LED etanj armat\\U+00FCr 36 W, 4.000 lm, IP65" "4" "144") ("ACL" "LED acil ayd\\U+0131nlatma armat\\U+00FCr\\U+00FC 3 W, 3 saat, s\\U+00FCrekli/s\\U+00FCrekli olmayan" "5" "15") ("EXT" "LED \\U+00E7\\U+0131k\\U+0131\\U+015F/y\\U+00F6nlendirme armat\\U+00FCr\\U+00FC 3 W, 3 saat" "11" "33") ("" "TOPLAM" "107" "11.100")))
+   ("NT" "CLD-P2-AYH-TABLO" 97243.5 -204779.3 25.0 "HESAP Y\\U+00D6NTEM\\U+0130" ("N = Em \\U+00B7 A / (\\U+03A6 \\U+00B7 \\U+03B7 \\U+00B7 MF)     k = 2\\U+00B7A / (hm \\U+00B7 \\U+00C7)     E = N \\U+00B7 \\U+03A6 \\U+00B7 \\U+03B7 \\U+00B7 MF / A \\U+2265 Em" "Em: TS EN 12464-1 bak\\U+0131m ayd\\U+0131nl\\U+0131k d\\U+00FCzeyi, \\U+03B7: kullan\\U+0131m fakt\\U+00F6r\\U+00FC (yans\\U+0131ma tavan/duvar/zemin 0,7/0,5/0,2)," "MF: bak\\U+0131m fakt\\U+00F6r\\U+00FC (temiz ortam 0,80 - \\U+00FCretim/teknik 0,70), hm: armat\\U+00FCr - \\U+00E7al\\U+0131\\U+015Fma d\\U+00FCzlemi (0,85 m) aras\\U+0131, \\U+00C7: mahal \\U+00E7evresi." "Toplam ayd\\U+0131nlatma g\\U+00FCc\\U+00FC 11,10 kW, ortalama g\\U+00FC\\U+00E7 yo\\U+011Funlu\\U+011Fu 5,4 W/m\\U+00B2." "Acil ayd\\U+0131nlatma: ka\\U+00E7\\U+0131\\U+015F yollar\\U+0131 \\U+2265 1 lx, y\\U+00FCksek riskli alanlar \\U+2265 %10 Em, s\\U+00FCre 3 saat (TS EN 1838, BYKHY)." "Armat\\U+00FCr yerle\\U+015Fimi ayr\\U+0131 \"AYDINLATMA TES\\U+0130SATI PLANI\" paftalar\\U+0131nda (CLD-P2-ICT-* katmanlar\\U+0131) g\\U+00F6sterilmi\\U+015Ftir."))
+   ("P" "CLD-P2-AYH-PAFTA" T 10.0 ((97043.5 -206414.3) (102443.5 -206414.3) (102443.5 -202679.3) (97043.5 -202679.3)))
+   ("P" "CLD-P2-AYH-PAFTA" nil 6.0 ((97043.5 -205664.3) (102443.5 -205664.3)))
+   ("T" "CLD-P2-AYH-YAZI" 97143.5 -205854.3 70.0 0 "HESAP TABLOLARI, CETVELLER VE NOTLAR")
+   ("T" "CLD-P2-AYH-YAZI" 97143.5 -206014.3 40.0 0 "AYDINLATMA HESABI (TS EN 12464-1)  -  \\U+00D6l\\U+00E7eksiz")
+   ("P" "CLD-P2-AYH-PAFTA" T 6.0 ((99943.5 -206394.3) (102443.5 -206394.3) (102443.5 -205684.3) (99943.5 -205684.3)))
+   ("T" "CLD-P2-AYH-YAZI" 99973.5 -205750.2 18.0 0 "\\U+0130\\U+015E\\U+0130N ADI")
+   ("T" "CLD-P2-AYH-YAZI" 100563.5 -205750.2 20.0 0 "AYDINLATMA HESABI (TS EN 12464-1)")
+   ("L" "CLD-P2-AYH-PAFTA" 99943.5 -205785.7 102443.5 -205785.7)
+   ("T" "CLD-P2-AYH-YAZI" 99973.5 -205851.7 18.0 0 "YAPI SAH\\U+0130B\\U+0130")
+   ("T" "CLD-P2-AYH-YAZI" 100563.5 -205851.7 20.0 0 "BROSCO \\U+0130THALAT \\U+0130HRACAT VE T\\U+0130CARET ANON\\U+0130M \\U+015E\\U+0130RKET\\U+0130")
+   ("L" "CLD-P2-AYH-PAFTA" 99943.5 -205887.2 102443.5 -205887.2)
+   ("T" "CLD-P2-AYH-YAZI" 99973.5 -205953.1 18.0 0 "ADRES")
+   ("T" "CLD-P2-AYH-YAZI" 100563.5 -205953.1 20.0 0 "YUKARI MAHALLE / KEMALPA\\U+015EA / \\U+0130ZM\\U+0130R  -  Ada: ......  Parsel: 2")
+   ("L" "CLD-P2-AYH-PAFTA" 99943.5 -205988.6 102443.5 -205988.6)
+   ("T" "CLD-P2-AYH-YAZI" 99973.5 -206054.5 18.0 0 "PAFTA ADI")
+   ("T" "CLD-P2-AYH-YAZI" 100563.5 -206054.5 20.0 0 "HESAP TABLOLARI VE NOTLAR")
+   ("L" "CLD-P2-AYH-PAFTA" 99943.5 -206090.0 102443.5 -206090.0)
+   ("T" "CLD-P2-AYH-YAZI" 99973.5 -206156.0 18.0 0 "\\U+00D6L\\U+00C7EK / TAR\\U+0130H / PAFTA NO")
+   ("T" "CLD-P2-AYH-YAZI" 100563.5 -206156.0 20.0 0 "\\U+00D6l\\U+00E7eksiz   |   19.10.2026   |   09-01")
+   ("L" "CLD-P2-AYH-PAFTA" 99943.5 -206191.5 102443.5 -206191.5)
+   ("T" "CLD-P2-AYH-YAZI" 99973.5 -206257.4 18.0 0 "PROJE M\\U+00DCELL\\U+0130F\\U+0130")
+   ("T" "CLD-P2-AYH-YAZI" 100563.5 -206257.4 20.0 0 "Elektrik M\\U+00FChendisi - Ad\\U+0131 Soyad\\U+0131: ..............................")
+   ("L" "CLD-P2-AYH-PAFTA" 99943.5 -206292.9 102443.5 -206292.9)
+   ("T" "CLD-P2-AYH-YAZI" 99973.5 -206358.8 18.0 0 "ODA S\\U+0130C\\U+0130L / SMM NO")
+   ("T" "CLD-P2-AYH-YAZI" 100563.5 -206358.8 20.0 0 "EMO Sicil No: ............   SMM Belge No: ............   \\U+0130mza: ............")
+   ("L" "CLD-P2-AYH-PAFTA" 100533.5 -206394.3 100533.5 -205684.3)))))
+
+(defun c:CLD_P2_AYDHESABI ( / *error* olderr)
+  (setq *error* cld:err)
+  (setq *cld-u* 100.0 *cld-ext* (list 0.0 0.0 1.0))
+  (cld:begin "CLD-P2-AYH-*")
+  (cld:unlock "CLD-P2-AYH-*")
+  (cld:unlock "CLD-AYH-*")
+  (cld:clear "CLD-AYH-*")
+  (cld:ops-p2_aydinlatma_hesabi-layers)
+  (cld:clear "CLD-P2-AYH-*")
+  (cld:def-symbols)
+  (cld:ops-p2_aydinlatma_hesabi-1)
+  (cld:end "CLD: Parsel 2 - AYDINLATMA HESABI (TS EN 12464-1) cizildi")
+  (princ))
+
+(if (cld:wrong-dwg "2" (list "3" "4" "5"))
+  (princ "\nCLD UYARI: Bu dosya PARSEL 2 icindir; acik cizim baska bir parsele ait gorunuyor. Yine de cizmek icin CLD_P2_AYDHESABI yazin.")
+  (progn (princ "\nCLD: Parsel 2 AYDINLATMA_HESABI yukleniyor, cizim olusturuluyor...") (c:CLD_P2_AYDHESABI)))
+(princ "\nCLD: Yeniden cizmek icin komut: CLD_P2_AYDHESABI")
+(princ)

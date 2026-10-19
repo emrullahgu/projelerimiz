@@ -1,0 +1,158 @@
+﻿CLD - BROSCO PARSEL 2-3-4-5 MÜHENDİSLİK LISP PAKETİ
+============================================================
+
+Bu klasördeki tüm dosyalar, komutlar, katmanlar ve bloklar "CLD" önekiyle adlandırılmıştır;
+başka bir araçla (ör. CXB önekli dosyalar) hazırlanan LISP'lerle çakışmaz. BROSCO_LISP ve
+CODEX_... klasörlerine dokunulmamıştır.
+
+KULLANIM
+--------
+1) İlgili mimari dosyayı açın: "BROSCO <n> NOLU PARSEL MİMARİ.dwg".
+2) APPLOAD ile PARSEL_<n> klasöründen istediğiniz CLD_P<n>_0x_*.lsp dosyasını (veya 9 dosyanın hepsini) yükleyin.
+   Dosya yüklenir yüklenmez çizim kendiliğinden oluşur, hiçbir soru sorulmaz.
+   AutoCAD güvenlik uyarısı verirse "Bir kez yükle" seçin; kalıcı çözüm: Seçenekler > Dosyalar > Güvenilen Konumlar a PARSEL_<n> klasörünü ekleyin.
+   Dosya yanlış parselin DWG sinde açılırsa çizmez, uyarı verir (komutu yazarak yine de çizdirilebilir).
+3) Çizimler mimarinin SAĞ tarafında, her disiplin ayrı bir satırda olacak şekilde yerleşir:
+   her tesisat ve her kat için ayrı çerçeveli pafta (gri mimari altlık + tesisat), satır sonunda lejant,
+   notlar ve hesap tabloları. Orijinal mimari paftaların üzerine hiçbir şey çizilmez.
+4) Tekrar çizmek için dosyadaki komutu yazın (aşağıdaki liste). Tekrar çizimde o disiplinin "CLD-P<n>-xxx-*"
+   katmanları temizlenip yeniden oluşturulur. Geri almak için UNDO (tek adım) kullanılabilir.
+5) Katmanlar: CLD-P<n>-ICT-* (iç tesisat), -TOP- (topraklama), -PAR- (paratoner), -KAK- (kuvvetli akım), -MEK- (mekanik),
+   -SIH- (sıhhi), -YUK- (yükleme), -KOL- (kolon şeması), -AYH- (aydınlatma hesabı). Gri mimari altlık: CLD-P<n>-xxx-ALTLIK.
+   Her pafta kendi lejantını çerçevesi içinde taşır; doğrudan çıktı alınabilir (1/100).
+
+Not: Mimari çizimler santimetre birimindedir (3 ve 5 nolu parsel WCS XZ düzleminde / Front UCS, 2 ve 4 nolu parsel XY);
+LISP ler mimarinin düzlemini otomatik algılar ve aynı düzlemde çizer. Paftalar 1/100 çıktıya göre ölçeklenmiştir.
+
+HAZIR ÇIKTILAR (LISP uygulanmış)
+-------------------------------
+Projeler         : her parsel için 9 LISP in uygulandığı DWG (mimari + tüm tesisat paftaları, ayrı katmanlarda).
+Projeler PDF     : her parsel için disiplin başına çok sayfalı PDF (CLD_Pn_0x_*.pdf) ve tüm proje seti
+                   (CLD_Pn_00_TUM_PROJELER.pdf, yer imli). Plan paftaları 1/100 gerçek ölçekte, uygun ISO kağıda
+                   (A0 / B0 / 2A0) basılmıştır; hesap tabloları ölçeksizdir.
+
+STANDARTLAR VE ODA (EMO / MMO) UYUMU
+------------------------------------
+  - Her paftada EMO / MMO formatında antet: işin adı, yapı sahibi, adres (ada/parsel), pafta adı, ölçek, tarih, pafta no;
+      proje müellifi adı, oda sicil no, SMM belge no ve imza alanları imza için boş bırakılmıştır.
+  - Kaçak akım (TS HD 60364-4-41, EMO): tüm tek fazlı son devreler 30 mA (bilgisayar/VRF A tipi), 3 fazlı motor devreleri 300 mA,
+      tali pano girişleri 300 mA S tipi (seçici), ADP ana şalterinde ayarlı toroid kaçak akım rölesi (yangın koruma);
+      yangın pompası beslemesinde açtırmalı kaçak akım rölesi yoktur (yalnız alarm, TS EN 12845).
+  - Gerilim düşümü: aydınlatma ve priz linyeleri ≤ %1,5, kuvvet ≤ %3, besleme hatları ≤ %1,5 (aşan linyeler otomatik bölündü).
+  - Kısa devre: her panoda Ik3 hesaplandı, şalter kesme kapasiteleri tabloda; trafo kablosunda her paralel hatta ayrı PE.
+  - Yangın pompası: trafo çıkışından ana şalter öncesi + jeneratörden (ATS öncesi) yedek besleme, yumuşak yol verici.
+  - Mekanik (MMO): TS 825 / TS EN 12831 ısı kaybı, TS EN 16798-1 taze hava, TS EN 378-1 soğutucu yoğunluk kontrolü,
+      radyant ısıtıcılar ısı kaybına göre boyutlandırıldı, panjurlar yalnız dış cephede.
+  - Sıhhi (MMO): TS EN 806-3 / DIN 1988-300, TS EN 12056-2/3 (iç dere C=1,5), temiz su - pis su kolon şeması,
+      yangın dolapları (BYKHY, TS EN 671-1, 25 m kapsama) ve yangın hattı ayrı paftada.
+
+DOSYALAR VE KOMUTLAR
+--------------------
+  CLD_P<n>_01_*.lsp   Elektrik İç Tesisat (aydınlatma ve priz ayrı paftalar)     komut: CLD_P<n>_ICTESISAT
+  CLD_P<n>_02_*.lsp   Topraklama                                                 komut: CLD_P<n>_TOPRAKLAMA
+  CLD_P<n>_03_*.lsp   Paratoner                                                  komut: CLD_P<n>_PARATONER
+  CLD_P<n>_04_*.lsp   Kuvvetli Akım (güç dağıtım)                                komut: CLD_P<n>_KUVVETLIAKIM
+  CLD_P<n>_05_*.lsp   Mekanik (VRF klima, havalandırma, radyant ısıtma ayrı paftalar) komut: CLD_P<n>_MEKANIK
+  CLD_P<n>_06_*.lsp   Sıhhi Tesisat (temiz-sıcak su, pis su, yağmur suyu ayrı paftalar) komut: CLD_P<n>_SIHHITESISAT
+  CLD_P<n>_07_*.lsp   Yükleme Cetvelleri                                         komut: CLD_P<n>_YUKLEMECETVELI
+  CLD_P<n>_08_*.lsp   Kolon Şeması                                               komut: CLD_P<n>_KOLONSEMASI
+  CLD_P<n>_09_*.lsp   Aydınlatma Hesabı                                          komut: CLD_P<n>_AYDHESABI
+
+PARSEL 2
+---------
+  Mimari: 2 kat, 12 mahal, kat kotlari ZK=+0.00, 1K=+3.00, bina yuksekligi 11.21 m
+  Elektrik: kurulu 238.6 kW, talep 148.5 kW, trafo 250 kVA, KMP 90 kVAr, jenerator 45 kVA
+  Aydinlatma: 107 armatur, 29 priz/cikis, 46 linye, 8 pano
+  Topraklama: R=0.97 ohm (birlesik), paratoner LPL I, 27 inis
+  Mekanik: VRF 4.4 kW ic unite, dis unite 5.0 kW
+  Sihhi: 12 armatur, 1 pis su kolonu, 14 yagmur inisi
+  Dosyalar:
+    CLD_P2_01_ELEKTRIK_IC_TESISAT.lsp            629 çizim komutu     113 KB
+    CLD_P2_02_TOPRAKLAMA.lsp                     262 çizim komutu      76 KB
+    CLD_P2_03_PARATONER.lsp                      309 çizim komutu      70 KB
+    CLD_P2_04_KUVVETLI_AKIM.lsp                  224 çizim komutu      76 KB
+    CLD_P2_05_MEKANIK.lsp                        391 çizim komutu      89 KB
+    CLD_P2_06_SIHHI_TESISAT.lsp                  535 çizim komutu     104 KB
+    CLD_P2_07_YUKLEME_CETVELI.lsp                 35 çizim komutu      40 KB
+    CLD_P2_08_KOLON_SEMASI.lsp                   148 çizim komutu      39 KB
+    CLD_P2_09_AYDINLATMA_HESABI.lsp               32 çizim komutu      32 KB
+
+PARSEL 3
+---------
+  Mimari: 2 kat, 29 mahal, kat kotlari ZK=+0.00, 1K=+3.50, bina yuksekligi 9.18 m
+  Elektrik: kurulu 372.4 kW, talep 240.3 kW, trafo 400 kVA, KMP 150 kVAr, jenerator 80 kVA
+  Aydinlatma: 262 armatur, 135 priz/cikis, 86 linye, 8 pano
+  Topraklama: R=0.79 ohm (birlesik), paratoner LPL II, 27 inis
+  Mekanik: VRF 56.0 kW ic unite, dis unite 50.4 kW
+  Sihhi: 38 armatur, 4 pis su kolonu, 28 yagmur inisi
+  Dosyalar:
+    CLD_P3_01_ELEKTRIK_IC_TESISAT.lsp           1081 çizim komutu     177 KB
+    CLD_P3_02_TOPRAKLAMA.lsp                     310 çizim komutu     101 KB
+    CLD_P3_03_PARATONER.lsp                      279 çizim komutu      87 KB
+    CLD_P3_04_KUVVETLI_AKIM.lsp                  225 çizim komutu      99 KB
+    CLD_P3_05_MEKANIK.lsp                        537 çizim komutu     124 KB
+    CLD_P3_06_SIHHI_TESISAT.lsp                  770 çizim komutu     151 KB
+    CLD_P3_07_YUKLEME_CETVELI.lsp                 35 çizim komutu      45 KB
+    CLD_P3_08_KOLON_SEMASI.lsp                   148 çizim komutu      39 KB
+    CLD_P3_09_AYDINLATMA_HESABI.lsp               32 çizim komutu      34 KB
+
+PARSEL 4
+---------
+  Mimari: 2 kat, 31 mahal, kat kotlari ZK=+0.00, 1K=+3.50, bina yuksekligi 9.18 m
+  Elektrik: kurulu 388.1 kW, talep 253.6 kW, trafo 400 kVA, KMP 150 kVAr, jenerator 100 kVA
+  Aydinlatma: 316 armatur, 177 priz/cikis, 101 linye, 8 pano
+  Topraklama: R=0.78 ohm (birlesik), paratoner LPL II, 27 inis
+  Mekanik: VRF 80.0 kW ic unite, dis unite 68.0 kW
+  Sihhi: 36 armatur, 4 pis su kolonu, 29 yagmur inisi
+  Dosyalar:
+    CLD_P4_01_ELEKTRIK_IC_TESISAT.lsp           1229 çizim komutu     186 KB
+    CLD_P4_02_TOPRAKLAMA.lsp                     269 çizim komutu      92 KB
+    CLD_P4_03_PARATONER.lsp                      280 çizim komutu      85 KB
+    CLD_P4_04_KUVVETLI_AKIM.lsp                  225 çizim komutu      92 KB
+    CLD_P4_05_MEKANIK.lsp                        557 çizim komutu     119 KB
+    CLD_P4_06_SIHHI_TESISAT.lsp                  766 çizim komutu     141 KB
+    CLD_P4_07_YUKLEME_CETVELI.lsp                 35 çizim komutu      46 KB
+    CLD_P4_08_KOLON_SEMASI.lsp                   148 çizim komutu      39 KB
+    CLD_P4_09_AYDINLATMA_HESABI.lsp               32 çizim komutu      34 KB
+
+PARSEL 5
+---------
+  Mimari: 2 kat, 28 mahal, kat kotlari ZK=+0.00, 1K=+3.50, bina yuksekligi 9.18 m
+  Elektrik: kurulu 326.4 kW, talep 211.3 kW, trafo 400 kVA, KMP 120 kVAr, jenerator 80 kVA
+  Aydinlatma: 255 armatur, 120 priz/cikis, 82 linye, 8 pano
+  Topraklama: R=0.84 ohm (birlesik), paratoner LPL II, 26 inis
+  Mekanik: VRF 57.4 kW ic unite, dis unite 45.0+8.0 kW
+  Sihhi: 36 armatur, 3 pis su kolonu, 27 yagmur inisi
+  Dosyalar:
+    CLD_P5_01_ELEKTRIK_IC_TESISAT.lsp           1052 çizim komutu     206 KB
+    CLD_P5_02_TOPRAKLAMA.lsp                     326 çizim komutu     137 KB
+    CLD_P5_03_PARATONER.lsp                      274 çizim komutu     112 KB
+    CLD_P5_04_KUVVETLI_AKIM.lsp                  219 çizim komutu     132 KB
+    CLD_P5_05_MEKANIK.lsp                        517 çizim komutu     156 KB
+    CLD_P5_06_SIHHI_TESISAT.lsp                  733 çizim komutu     180 KB
+    CLD_P5_07_YUKLEME_CETVELI.lsp                 35 çizim komutu      44 KB
+    CLD_P5_08_KOLON_SEMASI.lsp                   148 çizim komutu      39 KB
+    CLD_P5_09_AYDINLATMA_HESABI.lsp               32 çizim komutu      34 KB
+
+MÜHENDİSLİK KABULLERİ (sahada / işverenle teyit edilmelidir)
+-----------------------------------------------------------
+  - Konum İzmir/Kemalpaşa (KOSBİ): kış dış sıcaklığı 0 °C, yaz 35 °C, yıldırım yoğunluğu Ng = 3 /km²/yıl.
+  - Üretim makine yükleri bilinmediğinden 60 W/m² (hafif imalat) kabul edilmiş, bara kanalı ile dağıtılmıştır.
+  - Aydınlatma TS EN 12464-1: üretim 300 lx (LED highbay 150 W), ofis 500 lx (panel 36 W), lobi 200, WC 200, hol 100 lx.
+  - Zemin özdirenci 100 Ωm kabul edilmiştir; topraklama ölçümü ile doğrulanmalıdır.
+  - Mekanik: idari bölüm VRF ısı pompası + ısı geri kazanımlı taze hava; üretim holü çatı fanı (3 hava değ./h) + radyant ısıtıcı.
+  - Sıhhi: OSB şebekesi ≥ 3 bar, 60 l/kişi·gün, yangın dolabı 2 x 100 l/dk x 60 dk, yağmur suyu hasadı 20 l/m² çatı.
+  - Sıcak su merkezi değildir: ıslak hacimlerde yerel elektrikli ani ısıtıcı / termosifon (elektrik projesinde özel çıkış).
+  - Seksiyonel kapılar mimaride iç içe blok olduğundan kapı motoru linyesi 25 m kabul ile hesaplanmıştır (sahada teyit).
+  - Jeneratör gücü acil yükler + yangın pompası yumuşak yol verme şartının büyüğüne göre seçilmiştir.
+  - Mahaller mimari m² etiketleriyle doğrulanarak çıkarılmıştır; duvarı kapalı olmayan küçük mahaller yaklaşık (etiket alanı) alınmıştır.
+  - Proje çıktıları ön proje / uygulama altlığı niteliğindedir; ilgili mühendis kontrolü ve imzası ile onaya sunulmalıdır.
+
+GITHUB
+------
+Paket (DWG ler hariç - GitHub 100 MB dosya sınırı) özel depoda: https://github.com/emrullahgu/projelerimiz
+
+KAYNAK
+------
+_kaynak/ klasöründe LISP çekirdeği (cld_core.lsp, cld_sym.lsp) ve tüm hesapları yapan Python motoru (engine/) bulunur.
+Mimari değişirse: DWG verisi accoreconsole ile yeniden dökülüp "python engine/build.py <dump> <bu klasör>" çalıştırılır.

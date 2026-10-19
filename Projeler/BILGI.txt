@@ -1,0 +1,9 @@
+Bu klasörde 9 CLD LISP inin uygulandığı DWG dosyaları bulunur:
+
+  CLD_P2_BROSCO 2 NOLU PARSEL TESİSAT PROJELERİ.dwg  (~135 MB)
+  CLD_P3_BROSCO 3 NOLU PARSEL TESİSAT PROJELERİ.dwg  (~221 MB)
+  CLD_P4_BROSCO 4 NOLU PARSEL TESİSAT PROJELERİ.dwg  (~312 MB)
+  CLD_P5_BROSCO 5 NOLU PARSEL TESİSAT PROJELERİ.dwg  (~110 MB)
+
+DWG ler GitHub ın 100 MB dosya sınırını aştığı için depoya yüklenmemiştir; yerel kopyadadır.
+Aynı paftaların PDF leri "Projeler PDF" klasöründedir.

@@ -1,0 +1,1830 @@
+{
+ "2": {
+  "files": [
+   [
+    "CLD_P2_01_ELEKTRIK_IC_TESISAT.lsp",
+    629,
+    115653
+   ],
+   [
+    "CLD_P2_02_TOPRAKLAMA.lsp",
+    262,
+    77386
+   ],
+   [
+    "CLD_P2_03_PARATONER.lsp",
+    309,
+    71573
+   ],
+   [
+    "CLD_P2_04_KUVVETLI_AKIM.lsp",
+    224,
+    77502
+   ],
+   [
+    "CLD_P2_05_MEKANIK.lsp",
+    391,
+    91282
+   ],
+   [
+    "CLD_P2_06_SIHHI_TESISAT.lsp",
+    535,
+    106448
+   ],
+   [
+    "CLD_P2_07_YUKLEME_CETVELI.lsp",
+    35,
+    41456
+   ],
+   [
+    "CLD_P2_08_KOLON_SEMASI.lsp",
+    148,
+    39998
+   ],
+   [
+    "CLD_P2_09_AYDINLATMA_HESABI.lsp",
+    32,
+    33231
+   ]
+  ],
+  "zones": {
+   "01": [
+    97243.46,
+    -85552.87,
+    55128.83999999998,
+    15126.490000000005
+   ],
+   "02": [
+    97243.46,
+    -100679.36,
+    31243.42,
+    15126.490000000005
+   ],
+   "03": [
+    97243.46,
+    -115805.85,
+    30051.290000000008,
+    15126.490000000005
+   ],
+   "04": [
+    97243.46,
+    -130932.34000000001,
+    30666.51999999999,
+    15126.48999999999
+   ],
+   "05": [
+    97243.46,
+    -146058.83000000002,
+    66312.97000000004,
+    15126.48999999999
+   ],
+   "06": [
+    97243.46,
+    -161185.32,
+    95095.58999999995,
+    15126.48999999999
+   ],
+   "07": [
+    97243.46,
+    -176311.81,
+    5200.0,
+    11967.5
+   ],
+   "08": [
+    97243.46,
+    -188279.31,
+    26500.0,
+    13950.0
+   ],
+   "09": [
+    97243.46,
+    -202229.31,
+    5200.0,
+    7835.0
+   ]
+  },
+  "frames": [
+   {
+    "code": "01",
+    "no": 1,
+    "title": "AYDINLATMA TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 97143.46,
+    "y0": -96979.36,
+    "x1": 108641.19,
+    "y1": -86052.87
+   },
+   {
+    "code": "01",
+    "no": 2,
+    "title": "AYDINLATMA TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 109641.19,
+    "y0": -96979.36,
+    "x1": 120978.08,
+    "y1": -86052.87
+   },
+   {
+    "code": "01",
+    "no": 3,
+    "title": "PRİZ VE KUVVET TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 121978.08,
+    "y0": -96979.36,
+    "x1": 133438.61,
+    "y1": -86052.87
+   },
+   {
+    "code": "01",
+    "no": 4,
+    "title": "PRİZ VE KUVVET TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 134438.61,
+    "y0": -96979.36,
+    "x1": 145738.3,
+    "y1": -86052.87
+   },
+   {
+    "code": "01",
+    "no": 5,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 146638.3,
+    "y0": -91257.87,
+    "x1": 152372.3,
+    "y1": -86002.87
+   },
+   {
+    "code": "02",
+    "no": 1,
+    "title": "TEMEL TOPRAKLAMA VE EŞPOTANSİYEL PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 97143.46,
+    "y0": -112105.85,
+    "x1": 108814.79000000001,
+    "y1": -101179.36
+   },
+   {
+    "code": "02",
+    "no": 2,
+    "title": "EŞPOTANSİYEL BAĞLANTI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 109814.79000000001,
+    "y0": -112105.85,
+    "x1": 121002.88,
+    "y1": -101179.36
+   },
+   {
+    "code": "02",
+    "no": 3,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 121902.88,
+    "y0": -104749.36,
+    "x1": 128486.88,
+    "y1": -101129.36
+   },
+   {
+    "code": "03",
+    "no": 1,
+    "title": "ÇATI YAKALAMA SİSTEMİ (Faraday ağı 5x5 m, LPL I)",
+    "fk": "CT",
+    "floor": "ÇATI PLANI",
+    "x0": 97143.46,
+    "y0": -127232.34000000001,
+    "x1": 108559.02000000002,
+    "y1": -116305.85
+   },
+   {
+    "code": "03",
+    "no": 2,
+    "title": "İNİŞ İLETKENLERİ VE ÖLÇÜ KLEMENSLERİ",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 109559.02000000002,
+    "y0": -127232.34000000001,
+    "x1": 120994.75000000001,
+    "y1": -116305.85
+   },
+   {
+    "code": "03",
+    "no": 3,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 121894.75000000001,
+    "y0": -119990.85,
+    "x1": 127294.75000000001,
+    "y1": -116255.85
+   },
+   {
+    "code": "04",
+    "no": 1,
+    "title": "GÜÇ DAĞITIM PLANI (pano, besleme hattı, bara kanalı)",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 97143.46,
+    "y0": -142358.83000000002,
+    "x1": 108492.39,
+    "y1": -131432.34000000003
+   },
+   {
+    "code": "04",
+    "no": 2,
+    "title": "GÜÇ DAĞITIM PLANI (pano, besleme hattı, bara kanalı)",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 109492.39,
+    "y0": -142358.83000000002,
+    "x1": 120680.48,
+    "y1": -131432.34000000003
+   },
+   {
+    "code": "04",
+    "no": 3,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 121580.48,
+    "y0": -135587.34000000003,
+    "x1": 127909.98,
+    "y1": -131382.34000000003
+   },
+   {
+    "code": "05",
+    "no": 1,
+    "title": "VRF KLİMA TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 97143.46,
+    "y0": -157485.32,
+    "x1": 108380.79000000001,
+    "y1": -146558.83000000002
+   },
+   {
+    "code": "05",
+    "no": 2,
+    "title": "VRF KLİMA TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 109380.79000000001,
+    "y0": -157485.32,
+    "x1": 120457.28000000001,
+    "y1": -146558.83000000002
+   },
+   {
+    "code": "05",
+    "no": 3,
+    "title": "HAVALANDIRMA TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 121457.28000000001,
+    "y0": -157485.32,
+    "x1": 132806.21000000002,
+    "y1": -146558.83000000002
+   },
+   {
+    "code": "05",
+    "no": 4,
+    "title": "HAVALANDIRMA TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 133806.21000000002,
+    "y0": -157485.32,
+    "x1": 144994.30000000005,
+    "y1": -146558.83000000002
+   },
+   {
+    "code": "05",
+    "no": 5,
+    "title": "ISITMA (RADYANT) TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 145994.30000000005,
+    "y0": -157485.32,
+    "x1": 157256.43000000005,
+    "y1": -146558.83000000002
+   },
+   {
+    "code": "05",
+    "no": 6,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 158156.43000000005,
+    "y0": -150771.33000000002,
+    "x1": 163556.43000000005,
+    "y1": -146508.83000000002
+   },
+   {
+    "code": "06",
+    "no": 1,
+    "title": "TEMİZ SU VE SICAK SU TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 97143.46,
+    "y0": -172611.81,
+    "x1": 108554.39,
+    "y1": -161685.32
+   },
+   {
+    "code": "06",
+    "no": 2,
+    "title": "TEMİZ SU VE SICAK SU TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 109554.39,
+    "y0": -172611.81,
+    "x1": 120804.48,
+    "y1": -161685.32
+   },
+   {
+    "code": "06",
+    "no": 3,
+    "title": "PİS SU TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 121804.48,
+    "y0": -172611.81,
+    "x1": 133017.00999999998,
+    "y1": -161685.32
+   },
+   {
+    "code": "06",
+    "no": 4,
+    "title": "PİS SU TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 134017.00999999998,
+    "y0": -172611.81,
+    "x1": 145068.69999999995,
+    "y1": -161685.32
+   },
+   {
+    "code": "06",
+    "no": 5,
+    "title": "YAĞMUR SUYU TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 146068.69999999995,
+    "y0": -172611.81,
+    "x1": 157467.22999999995,
+    "y1": -161685.32
+   },
+   {
+    "code": "06",
+    "no": 6,
+    "title": "YANGIN DOLABI TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 158467.22999999995,
+    "y0": -172611.81,
+    "x1": 169952.55999999997,
+    "y1": -161685.32
+   },
+   {
+    "code": "06",
+    "no": 7,
+    "title": "YANGIN DOLABI TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 170952.55999999997,
+    "y0": -172611.81,
+    "x1": 182277.04999999996,
+    "y1": -161685.32
+   },
+   {
+    "code": "06",
+    "no": 8,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 183177.04999999996,
+    "y0": -167085.32,
+    "x1": 192339.04999999996,
+    "y1": -161635.32
+   },
+   {
+    "code": "07",
+    "no": 1,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 97043.46,
+    "y0": -184629.31,
+    "x1": 102443.46,
+    "y1": -176761.81
+   },
+   {
+    "code": "08",
+    "no": 1,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 97043.46,
+    "y0": -198579.31,
+    "x1": 123743.46,
+    "y1": -188729.31
+   },
+   {
+    "code": "09",
+    "no": 1,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 97043.46,
+    "y0": -206414.31,
+    "x1": 102443.46,
+    "y1": -202679.31
+   }
+  ],
+  "summary": [
+   "Mimari: 2 kat, 12 mahal, kat kotlari ZK=+0.00, 1K=+3.00, bina yuksekligi 11.21 m",
+   "Elektrik: kurulu 238.6 kW, talep 148.5 kW, trafo 250 kVA, KMP 90 kVAr, jenerator 45 kVA",
+   "Aydinlatma: 107 armatur, 29 priz/cikis, 46 linye, 8 pano",
+   "Topraklama: R=0.97 ohm (birlesik), paratoner LPL I, 27 inis",
+   "Mekanik: VRF 4.4 kW ic unite, dis unite 5.0 kW",
+   "Sihhi: 12 armatur, 1 pis su kolonu, 14 yagmur inisi"
+  ],
+  "secs": 0.8
+ },
+ "3": {
+  "files": [
+   [
+    "CLD_P3_01_ELEKTRIK_IC_TESISAT.lsp",
+    1081,
+    181145
+   ],
+   [
+    "CLD_P3_02_TOPRAKLAMA.lsp",
+    310,
+    103681
+   ],
+   [
+    "CLD_P3_03_PARATONER.lsp",
+    279,
+    89342
+   ],
+   [
+    "CLD_P3_04_KUVVETLI_AKIM.lsp",
+    225,
+    101307
+   ],
+   [
+    "CLD_P3_05_MEKANIK.lsp",
+    537,
+    127361
+   ],
+   [
+    "CLD_P3_06_SIHHI_TESISAT.lsp",
+    770,
+    154828
+   ],
+   [
+    "CLD_P3_07_YUKLEME_CETVELI.lsp",
+    35,
+    45732
+   ],
+   [
+    "CLD_P3_08_KOLON_SEMASI.lsp",
+    148,
+    39807
+   ],
+   [
+    "CLD_P3_09_AYDINLATMA_HESABI.lsp",
+    32,
+    35214
+   ]
+  ],
+  "zones": {
+   "01": [
+    217822.88,
+    24610.02,
+    41321.399999999965,
+    15126.49
+   ],
+   "02": [
+    217822.88,
+    9483.53,
+    24339.70000000001,
+    15126.49
+   ],
+   "03": [
+    217822.88,
+    -5642.959999999999,
+    23241.870000000024,
+    15126.49
+   ],
+   "04": [
+    217822.88,
+    -20769.449999999997,
+    23795.800000000017,
+    15126.489999999998
+   ],
+   "05": [
+    217822.88,
+    -35895.939999999995,
+    48827.68000000005,
+    15126.489999999998
+   ],
+   "06": [
+    217822.88,
+    -51022.42999999999,
+    77306.57999999996,
+    15126.489999999998
+   ],
+   "07": [
+    217822.88,
+    -66148.91999999998,
+    5200.0,
+    13967.5
+   ],
+   "08": [
+    217822.88,
+    -80116.41999999998,
+    26500.0,
+    13950.0
+   ],
+   "09": [
+    217822.88,
+    -94066.41999999998,
+    5200.0,
+    8735.0
+   ]
+  },
+  "frames": [
+   {
+    "code": "01",
+    "no": 1,
+    "title": "AYDINLATMA TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 217722.88,
+    "y0": 13183.53,
+    "x1": 225542.76,
+    "y1": 24110.02
+   },
+   {
+    "code": "01",
+    "no": 2,
+    "title": "AYDINLATMA TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 226542.76,
+    "y0": 13183.53,
+    "x1": 234653.78,
+    "y1": 24110.02
+   },
+   {
+    "code": "01",
+    "no": 3,
+    "title": "PRİZ VE KUVVET TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 235653.78,
+    "y0": 13183.53,
+    "x1": 243436.46,
+    "y1": 24110.02
+   },
+   {
+    "code": "01",
+    "no": 4,
+    "title": "PRİZ VE KUVVET TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 244436.46,
+    "y0": 13183.53,
+    "x1": 252510.27999999997,
+    "y1": 24110.02
+   },
+   {
+    "code": "01",
+    "no": 5,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 253410.27999999997,
+    "y0": 16905.02,
+    "x1": 259144.27999999997,
+    "y1": 24160.02
+   },
+   {
+    "code": "02",
+    "no": 1,
+    "title": "TEMEL TOPRAKLAMA VE EŞPOTANSİYEL PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 217722.88,
+    "y0": -1942.9599999999991,
+    "x1": 225716.36000000002,
+    "y1": 8983.53
+   },
+   {
+    "code": "02",
+    "no": 2,
+    "title": "EŞPOTANSİYEL BAĞLANTI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 226716.36000000002,
+    "y0": -1942.9599999999991,
+    "x1": 234678.58000000002,
+    "y1": 8983.53
+   },
+   {
+    "code": "02",
+    "no": 3,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 235578.58000000002,
+    "y0": 5413.530000000001,
+    "x1": 242162.58000000002,
+    "y1": 9033.53
+   },
+   {
+    "code": "03",
+    "no": 1,
+    "title": "ÇATI YAKALAMA SİSTEMİ (Faraday ağı 10x10 m, LPL II)",
+    "fk": "CT",
+    "floor": "ÇATI PLANI",
+    "x0": 217722.88,
+    "y0": -17069.449999999997,
+    "x1": 226006.87000000002,
+    "y1": -6142.959999999999
+   },
+   {
+    "code": "03",
+    "no": 2,
+    "title": "İNİŞ İLETKENLERİ VE ÖLÇÜ KLEMENSLERİ",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 227006.87000000002,
+    "y0": -17069.449999999997,
+    "x1": 234764.75000000003,
+    "y1": -6142.959999999999
+   },
+   {
+    "code": "03",
+    "no": 3,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 235664.75000000003,
+    "y0": -9827.96,
+    "x1": 241064.75000000003,
+    "y1": -6092.959999999999
+   },
+   {
+    "code": "04",
+    "no": 1,
+    "title": "GÜÇ DAĞITIM PLANI (pano, besleme hattı, bara kanalı)",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 217722.88,
+    "y0": -32195.939999999995,
+    "x1": 225393.96000000002,
+    "y1": -21269.449999999997
+   },
+   {
+    "code": "04",
+    "no": 2,
+    "title": "GÜÇ DAĞITIM PLANI (pano, besleme hattı, bara kanalı)",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 226393.96000000002,
+    "y0": -32195.939999999995,
+    "x1": 234356.18000000002,
+    "y1": -21269.449999999997
+   },
+   {
+    "code": "04",
+    "no": 3,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 235256.18000000002,
+    "y0": -25424.449999999997,
+    "x1": 241618.68000000002,
+    "y1": -21219.449999999997
+   },
+   {
+    "code": "05",
+    "no": 1,
+    "title": "VRF KLİMA TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 217722.88,
+    "y0": -47322.42999999999,
+    "x1": 225282.36000000002,
+    "y1": -36395.939999999995
+   },
+   {
+    "code": "05",
+    "no": 2,
+    "title": "VRF KLİMA TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 226282.36000000002,
+    "y0": -47322.42999999999,
+    "x1": 234132.98,
+    "y1": -36395.939999999995
+   },
+   {
+    "code": "05",
+    "no": 3,
+    "title": "HAVALANDIRMA TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 235132.98,
+    "y0": -47322.42999999999,
+    "x1": 242804.06000000003,
+    "y1": -36395.939999999995
+   },
+   {
+    "code": "05",
+    "no": 4,
+    "title": "HAVALANDIRMA TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 243804.06000000003,
+    "y0": -47322.42999999999,
+    "x1": 251766.28000000003,
+    "y1": -36395.939999999995
+   },
+   {
+    "code": "05",
+    "no": 5,
+    "title": "ISITMA (RADYANT) TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 252766.28000000003,
+    "y0": -47322.42999999999,
+    "x1": 260350.56000000003,
+    "y1": -36395.939999999995
+   },
+   {
+    "code": "05",
+    "no": 6,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 261250.56000000003,
+    "y0": -41058.439999999995,
+    "x1": 266650.56000000006,
+    "y1": -36345.939999999995
+   },
+   {
+    "code": "06",
+    "no": 1,
+    "title": "TEMİZ SU VE SICAK SU TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 217722.88,
+    "y0": -62448.91999999999,
+    "x1": 225455.96000000002,
+    "y1": -51522.42999999999
+   },
+   {
+    "code": "06",
+    "no": 2,
+    "title": "TEMİZ SU VE SICAK SU TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 226455.96000000002,
+    "y0": -62448.91999999999,
+    "x1": 234480.18000000002,
+    "y1": -51522.42999999999
+   },
+   {
+    "code": "06",
+    "no": 3,
+    "title": "PİS SU TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 235480.18000000002,
+    "y0": -62448.91999999999,
+    "x1": 243014.86000000002,
+    "y1": -51522.42999999999
+   },
+   {
+    "code": "06",
+    "no": 4,
+    "title": "PİS SU TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 244014.86000000002,
+    "y0": -62448.91999999999,
+    "x1": 251840.68,
+    "y1": -51522.42999999999
+   },
+   {
+    "code": "06",
+    "no": 5,
+    "title": "YAĞMUR SUYU TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 252840.68,
+    "y0": -62448.91999999999,
+    "x1": 260561.36,
+    "y1": -51522.42999999999
+   },
+   {
+    "code": "06",
+    "no": 6,
+    "title": "YANGIN DOLABI TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 261561.36,
+    "y0": -62448.91999999999,
+    "x1": 269368.83999999997,
+    "y1": -51522.42999999999
+   },
+   {
+    "code": "06",
+    "no": 7,
+    "title": "YANGIN DOLABI TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 270368.83999999997,
+    "y0": -62448.91999999999,
+    "x1": 278467.45999999996,
+    "y1": -51522.42999999999
+   },
+   {
+    "code": "06",
+    "no": 8,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 279367.45999999996,
+    "y0": -56922.42999999999,
+    "x1": 295129.45999999996,
+    "y1": -51472.42999999999
+   },
+   {
+    "code": "07",
+    "no": 1,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 217622.88,
+    "y0": -76466.41999999998,
+    "x1": 223022.88,
+    "y1": -66598.91999999998
+   },
+   {
+    "code": "08",
+    "no": 1,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 217622.88,
+    "y0": -90416.41999999998,
+    "x1": 244322.88,
+    "y1": -80566.41999999998
+   },
+   {
+    "code": "09",
+    "no": 1,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 217622.88,
+    "y0": -99151.41999999998,
+    "x1": 223022.88,
+    "y1": -94516.41999999998
+   }
+  ],
+  "summary": [
+   "Mimari: 2 kat, 29 mahal, kat kotlari ZK=+0.00, 1K=+3.50, bina yuksekligi 9.18 m",
+   "Elektrik: kurulu 372.4 kW, talep 240.3 kW, trafo 400 kVA, KMP 150 kVAr, jenerator 80 kVA",
+   "Aydinlatma: 262 armatur, 135 priz/cikis, 86 linye, 8 pano",
+   "Topraklama: R=0.79 ohm (birlesik), paratoner LPL II, 27 inis",
+   "Mekanik: VRF 56.0 kW ic unite, dis unite 50.4 kW",
+   "Sihhi: 38 armatur, 4 pis su kolonu, 28 yagmur inisi"
+  ],
+  "secs": 1.5
+ },
+ "4": {
+  "files": [
+   [
+    "CLD_P4_01_ELEKTRIK_IC_TESISAT.lsp",
+    1229,
+    190834
+   ],
+   [
+    "CLD_P4_02_TOPRAKLAMA.lsp",
+    269,
+    94520
+   ],
+   [
+    "CLD_P4_03_PARATONER.lsp",
+    280,
+    86682
+   ],
+   [
+    "CLD_P4_04_KUVVETLI_AKIM.lsp",
+    225,
+    94185
+   ],
+   [
+    "CLD_P4_05_MEKANIK.lsp",
+    557,
+    122245
+   ],
+   [
+    "CLD_P4_06_SIHHI_TESISAT.lsp",
+    766,
+    144259
+   ],
+   [
+    "CLD_P4_07_YUKLEME_CETVELI.lsp",
+    35,
+    47163
+   ],
+   [
+    "CLD_P4_08_KOLON_SEMASI.lsp",
+    148,
+    39614
+   ],
+   [
+    "CLD_P4_09_AYDINLATMA_HESABI.lsp",
+    32,
+    35323
+   ]
+  ],
+  "zones": {
+   "01": [
+    224247.88,
+    191599.18,
+    41321.399999999965,
+    15126.48999999999
+   ],
+   "02": [
+    224247.88,
+    176472.69,
+    24339.70000000001,
+    15126.48999999999
+   ],
+   "03": [
+    224247.88,
+    161346.2,
+    23241.870000000024,
+    15126.48999999999
+   ],
+   "04": [
+    224247.88,
+    146219.71000000002,
+    23795.800000000017,
+    15126.48999999999
+   ],
+   "05": [
+    224247.88,
+    131093.22000000003,
+    48827.68000000005,
+    15126.48999999999
+   ],
+   "06": [
+    224247.88,
+    115966.73000000004,
+    77306.57999999996,
+    15126.48999999999
+   ],
+   "07": [
+    224247.88,
+    100840.24000000005,
+    6648.5,
+    14450.0
+   ],
+   "08": [
+    224247.88,
+    86390.24000000005,
+    26500.0,
+    13950.0
+   ],
+   "09": [
+    224247.88,
+    72440.24000000005,
+    5200.0,
+    8835.0
+   ]
+  },
+  "frames": [
+   {
+    "code": "01",
+    "no": 1,
+    "title": "AYDINLATMA TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 224147.88,
+    "y0": 180172.69,
+    "x1": 231967.76,
+    "y1": 191099.18
+   },
+   {
+    "code": "01",
+    "no": 2,
+    "title": "AYDINLATMA TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 232967.76,
+    "y0": 180172.69,
+    "x1": 241078.78,
+    "y1": 191099.18
+   },
+   {
+    "code": "01",
+    "no": 3,
+    "title": "PRİZ VE KUVVET TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 242078.78,
+    "y0": 180172.69,
+    "x1": 249861.46,
+    "y1": 191099.18
+   },
+   {
+    "code": "01",
+    "no": 4,
+    "title": "PRİZ VE KUVVET TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 250861.46,
+    "y0": 180172.69,
+    "x1": 258935.27999999997,
+    "y1": 191099.18
+   },
+   {
+    "code": "01",
+    "no": 5,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 259835.27999999997,
+    "y0": 182719.18,
+    "x1": 265569.27999999997,
+    "y1": 191149.18
+   },
+   {
+    "code": "02",
+    "no": 1,
+    "title": "TEMEL TOPRAKLAMA VE EŞPOTANSİYEL PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 224147.88,
+    "y0": 165046.2,
+    "x1": 232141.36000000002,
+    "y1": 175972.69
+   },
+   {
+    "code": "02",
+    "no": 2,
+    "title": "EŞPOTANSİYEL BAĞLANTI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 233141.36000000002,
+    "y0": 165046.2,
+    "x1": 241103.58000000002,
+    "y1": 175972.69
+   },
+   {
+    "code": "02",
+    "no": 3,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 242003.58000000002,
+    "y0": 172402.69,
+    "x1": 248587.58000000002,
+    "y1": 176022.69
+   },
+   {
+    "code": "03",
+    "no": 1,
+    "title": "ÇATI YAKALAMA SİSTEMİ (Faraday ağı 10x10 m, LPL II)",
+    "fk": "CT",
+    "floor": "ÇATI PLANI",
+    "x0": 224147.88,
+    "y0": 149919.71000000002,
+    "x1": 232431.87000000002,
+    "y1": 160846.2
+   },
+   {
+    "code": "03",
+    "no": 2,
+    "title": "İNİŞ İLETKENLERİ VE ÖLÇÜ KLEMENSLERİ",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 233431.87000000002,
+    "y0": 149919.71000000002,
+    "x1": 241189.75000000003,
+    "y1": 160846.2
+   },
+   {
+    "code": "03",
+    "no": 3,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 242089.75000000003,
+    "y0": 157161.2,
+    "x1": 247489.75000000003,
+    "y1": 160896.2
+   },
+   {
+    "code": "04",
+    "no": 1,
+    "title": "GÜÇ DAĞITIM PLANI (pano, besleme hattı, bara kanalı)",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 224147.88,
+    "y0": 134793.22000000003,
+    "x1": 231818.96000000002,
+    "y1": 145719.71000000002
+   },
+   {
+    "code": "04",
+    "no": 2,
+    "title": "GÜÇ DAĞITIM PLANI (pano, besleme hattı, bara kanalı)",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 232818.96000000002,
+    "y0": 134793.22000000003,
+    "x1": 240781.18000000002,
+    "y1": 145719.71000000002
+   },
+   {
+    "code": "04",
+    "no": 3,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 241681.18000000002,
+    "y0": 141564.71000000002,
+    "x1": 248043.68000000002,
+    "y1": 145769.71000000002
+   },
+   {
+    "code": "05",
+    "no": 1,
+    "title": "VRF KLİMA TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 224147.88,
+    "y0": 119666.73000000004,
+    "x1": 231707.36000000002,
+    "y1": 130593.22000000003
+   },
+   {
+    "code": "05",
+    "no": 2,
+    "title": "VRF KLİMA TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 232707.36000000002,
+    "y0": 119666.73000000004,
+    "x1": 240557.98,
+    "y1": 130593.22000000003
+   },
+   {
+    "code": "05",
+    "no": 3,
+    "title": "HAVALANDIRMA TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 241557.98,
+    "y0": 119666.73000000004,
+    "x1": 249229.06000000003,
+    "y1": 130593.22000000003
+   },
+   {
+    "code": "05",
+    "no": 4,
+    "title": "HAVALANDIRMA TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 250229.06000000003,
+    "y0": 119666.73000000004,
+    "x1": 258191.28000000003,
+    "y1": 130593.22000000003
+   },
+   {
+    "code": "05",
+    "no": 5,
+    "title": "ISITMA (RADYANT) TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 259191.28000000003,
+    "y0": 119666.73000000004,
+    "x1": 266775.56000000006,
+    "y1": 130593.22000000003
+   },
+   {
+    "code": "05",
+    "no": 6,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 267675.56000000006,
+    "y0": 125930.72000000003,
+    "x1": 273075.56000000006,
+    "y1": 130643.22000000003
+   },
+   {
+    "code": "06",
+    "no": 1,
+    "title": "TEMİZ SU VE SICAK SU TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 224147.88,
+    "y0": 104540.24000000005,
+    "x1": 231880.96000000002,
+    "y1": 115466.73000000004
+   },
+   {
+    "code": "06",
+    "no": 2,
+    "title": "TEMİZ SU VE SICAK SU TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 232880.96000000002,
+    "y0": 104540.24000000005,
+    "x1": 240905.18000000002,
+    "y1": 115466.73000000004
+   },
+   {
+    "code": "06",
+    "no": 3,
+    "title": "PİS SU TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 241905.18000000002,
+    "y0": 104540.24000000005,
+    "x1": 249439.86000000002,
+    "y1": 115466.73000000004
+   },
+   {
+    "code": "06",
+    "no": 4,
+    "title": "PİS SU TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 250439.86000000002,
+    "y0": 104540.24000000005,
+    "x1": 258265.68,
+    "y1": 115466.73000000004
+   },
+   {
+    "code": "06",
+    "no": 5,
+    "title": "YAĞMUR SUYU TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 259265.68,
+    "y0": 104540.24000000005,
+    "x1": 266986.36,
+    "y1": 115466.73000000004
+   },
+   {
+    "code": "06",
+    "no": 6,
+    "title": "YANGIN DOLABI TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 267986.36,
+    "y0": 104540.24000000005,
+    "x1": 275793.83999999997,
+    "y1": 115466.73000000004
+   },
+   {
+    "code": "06",
+    "no": 7,
+    "title": "YANGIN DOLABI TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 276793.83999999997,
+    "y0": 104540.24000000005,
+    "x1": 284892.45999999996,
+    "y1": 115466.73000000004
+   },
+   {
+    "code": "06",
+    "no": 8,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 285792.45999999996,
+    "y0": 110066.73000000004,
+    "x1": 301554.45999999996,
+    "y1": 115516.73000000004
+   },
+   {
+    "code": "07",
+    "no": 1,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 224047.88,
+    "y0": 90040.24000000005,
+    "x1": 230896.38,
+    "y1": 100390.24000000005
+   },
+   {
+    "code": "08",
+    "no": 1,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 224047.88,
+    "y0": 76090.24000000005,
+    "x1": 250747.88,
+    "y1": 85940.24000000005
+   },
+   {
+    "code": "09",
+    "no": 1,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 224047.88,
+    "y0": 67255.24000000005,
+    "x1": 229447.88,
+    "y1": 71990.24000000005
+   }
+  ],
+  "summary": [
+   "Mimari: 2 kat, 31 mahal, kat kotlari ZK=+0.00, 1K=+3.50, bina yuksekligi 9.18 m",
+   "Elektrik: kurulu 388.1 kW, talep 253.6 kW, trafo 400 kVA, KMP 150 kVAr, jenerator 100 kVA",
+   "Aydinlatma: 316 armatur, 177 priz/cikis, 101 linye, 8 pano",
+   "Topraklama: R=0.78 ohm (birlesik), paratoner LPL II, 27 inis",
+   "Mekanik: VRF 80.0 kW ic unite, dis unite 68.0 kW",
+   "Sihhi: 36 armatur, 4 pis su kolonu, 29 yagmur inisi"
+  ],
+  "secs": 1.7
+ },
+ "5": {
+  "files": [
+   [
+    "CLD_P5_01_ELEKTRIK_IC_TESISAT.lsp",
+    1052,
+    210479
+   ],
+   [
+    "CLD_P5_02_TOPRAKLAMA.lsp",
+    326,
+    140133
+   ],
+   [
+    "CLD_P5_03_PARATONER.lsp",
+    274,
+    114525
+   ],
+   [
+    "CLD_P5_04_KUVVETLI_AKIM.lsp",
+    219,
+    135657
+   ],
+   [
+    "CLD_P5_05_MEKANIK.lsp",
+    517,
+    160065
+   ],
+   [
+    "CLD_P5_06_SIHHI_TESISAT.lsp",
+    733,
+    184382
+   ],
+   [
+    "CLD_P5_07_YUKLEME_CETVELI.lsp",
+    35,
+    45083
+   ],
+   [
+    "CLD_P5_08_KOLON_SEMASI.lsp",
+    148,
+    39869
+   ],
+   [
+    "CLD_P5_09_AYDINLATMA_HESABI.lsp",
+    32,
+    35177
+   ]
+  ],
+  "zones": {
+   "01": [
+    267609.55,
+    6094.63,
+    51379.09999999998,
+    13860.0
+   ],
+   "02": [
+    267609.55,
+    -7765.37,
+    29368.54999999999,
+    13860.0
+   ],
+   "03": [
+    267609.55,
+    -21625.37,
+    27952.699999999953,
+    13860.0
+   ],
+   "04": [
+    267609.55,
+    -35485.369999999995,
+    28824.650000000023,
+    13860.0
+   ],
+   "05": [
+    267609.55,
+    -49345.369999999995,
+    61467.56,
+    13860.0
+   ],
+   "06": [
+    267609.55,
+    -63205.369999999995,
+    92775.30999999994,
+    13860.0
+   ],
+   "07": [
+    267609.55,
+    -77065.37,
+    5200.0,
+    13767.5
+   ],
+   "08": [
+    267609.55,
+    -90832.87,
+    26500.0,
+    13950.0
+   ],
+   "09": [
+    267609.55,
+    -104782.87,
+    5200.0,
+    8685.0
+   ]
+  },
+  "frames": [
+   {
+    "code": "01",
+    "no": 1,
+    "title": "AYDINLATMA TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 267509.55,
+    "y0": -4065.37,
+    "x1": 277911.61,
+    "y1": 5594.63
+   },
+   {
+    "code": "01",
+    "no": 2,
+    "title": "AYDINLATMA TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 278911.61,
+    "y0": -4065.37,
+    "x1": 289469.3,
+    "y1": 5594.63
+   },
+   {
+    "code": "01",
+    "no": 3,
+    "title": "PRİZ VE KUVVET TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 290469.3,
+    "y0": -4065.37,
+    "x1": 300834.16,
+    "y1": 5594.63
+   },
+   {
+    "code": "01",
+    "no": 4,
+    "title": "PRİZ VE KUVVET TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 301834.16,
+    "y0": -4065.37,
+    "x1": 312354.64999999997,
+    "y1": 5594.63
+   },
+   {
+    "code": "01",
+    "no": 5,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 313254.64999999997,
+    "y0": -1410.37,
+    "x1": 318988.64999999997,
+    "y1": 5644.63
+   },
+   {
+    "code": "02",
+    "no": 1,
+    "title": "TEMEL TOPRAKLAMA VE EŞPOTANSİYEL PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 267509.55,
+    "y0": -17925.37,
+    "x1": 278085.20999999996,
+    "y1": -8265.369999999999
+   },
+   {
+    "code": "02",
+    "no": 2,
+    "title": "EŞPOTANSİYEL BAĞLANTI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 279085.20999999996,
+    "y0": -17925.37,
+    "x1": 289494.1,
+    "y1": -8265.369999999999
+   },
+   {
+    "code": "02",
+    "no": 3,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 290394.1,
+    "y0": -11835.369999999999,
+    "x1": 296978.1,
+    "y1": -8215.369999999999
+   },
+   {
+    "code": "03",
+    "no": 1,
+    "title": "ÇATI YAKALAMA SİSTEMİ (Faraday ağı 10x10 m, LPL II)",
+    "fk": "CT",
+    "floor": "ÇATI PLANI",
+    "x0": 267509.55,
+    "y0": -31785.37,
+    "x1": 277922.18999999994,
+    "y1": -22125.37
+   },
+   {
+    "code": "03",
+    "no": 2,
+    "title": "İNİŞ İLETKENLERİ VE ÖLÇÜ KLEMENSLERİ",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 278922.18999999994,
+    "y0": -31785.37,
+    "x1": 289262.24999999994,
+    "y1": -22125.37
+   },
+   {
+    "code": "03",
+    "no": 3,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 290162.24999999994,
+    "y0": -25810.37,
+    "x1": 295562.24999999994,
+    "y1": -22075.37
+   },
+   {
+    "code": "04",
+    "no": 1,
+    "title": "GÜÇ DAĞITIM PLANI (pano, besleme hattı, bara kanalı)",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 267509.55,
+    "y0": -45645.369999999995,
+    "x1": 277762.81,
+    "y1": -35985.369999999995
+   },
+   {
+    "code": "04",
+    "no": 2,
+    "title": "GÜÇ DAĞITIM PLANI (pano, besleme hattı, bara kanalı)",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 278762.81,
+    "y0": -45645.369999999995,
+    "x1": 289171.7,
+    "y1": -35985.369999999995
+   },
+   {
+    "code": "04",
+    "no": 3,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 290071.7,
+    "y0": -40140.369999999995,
+    "x1": 296434.2,
+    "y1": -35935.369999999995
+   },
+   {
+    "code": "05",
+    "no": 1,
+    "title": "VRF KLİMA TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 267509.55,
+    "y0": -59505.369999999995,
+    "x1": 277651.20999999996,
+    "y1": -49845.369999999995
+   },
+   {
+    "code": "05",
+    "no": 2,
+    "title": "VRF KLİMA TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 278651.20999999996,
+    "y0": -59505.369999999995,
+    "x1": 288948.49999999994,
+    "y1": -49845.369999999995
+   },
+   {
+    "code": "05",
+    "no": 3,
+    "title": "HAVALANDIRMA TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 289948.49999999994,
+    "y0": -59505.369999999995,
+    "x1": 300201.75999999995,
+    "y1": -49845.369999999995
+   },
+   {
+    "code": "05",
+    "no": 4,
+    "title": "HAVALANDIRMA TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 301201.75999999995,
+    "y0": -59505.369999999995,
+    "x1": 311610.64999999997,
+    "y1": -49845.369999999995
+   },
+   {
+    "code": "05",
+    "no": 5,
+    "title": "ISITMA (RADYANT) TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 312610.64999999997,
+    "y0": -59505.369999999995,
+    "x1": 322777.11,
+    "y1": -49845.369999999995
+   },
+   {
+    "code": "05",
+    "no": 6,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 323677.11,
+    "y0": -54607.869999999995,
+    "x1": 329077.11,
+    "y1": -49795.369999999995
+   },
+   {
+    "code": "06",
+    "no": 1,
+    "title": "TEMİZ SU VE SICAK SU TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 267509.55,
+    "y0": -73365.37,
+    "x1": 277824.81,
+    "y1": -63705.369999999995
+   },
+   {
+    "code": "06",
+    "no": 2,
+    "title": "TEMİZ SU VE SICAK SU TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 278824.81,
+    "y0": -73365.37,
+    "x1": 289295.7,
+    "y1": -63705.369999999995
+   },
+   {
+    "code": "06",
+    "no": 3,
+    "title": "PİS SU TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 290295.7,
+    "y0": -73365.37,
+    "x1": 300412.56,
+    "y1": -63705.369999999995
+   },
+   {
+    "code": "06",
+    "no": 4,
+    "title": "PİS SU TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 301412.56,
+    "y0": -73365.37,
+    "x1": 311685.05,
+    "y1": -63705.369999999995
+   },
+   {
+    "code": "06",
+    "no": 5,
+    "title": "YAĞMUR SUYU TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 312685.05,
+    "y0": -73365.37,
+    "x1": 322987.91,
+    "y1": -63705.369999999995
+   },
+   {
+    "code": "06",
+    "no": 6,
+    "title": "YANGIN DOLABI TESİSATI PLANI",
+    "fk": "ZK",
+    "floor": "ZEMİN KAT PLANI",
+    "x0": 323987.91,
+    "y0": -73365.37,
+    "x1": 334377.56999999995,
+    "y1": -63705.369999999995
+   },
+   {
+    "code": "06",
+    "no": 7,
+    "title": "YANGIN DOLABI TESİSATI PLANI",
+    "fk": "1K",
+    "floor": "1. KAT PLANI",
+    "x0": 335377.56999999995,
+    "y0": -73365.37,
+    "x1": 345922.8599999999,
+    "y1": -63705.369999999995
+   },
+   {
+    "code": "06",
+    "no": 8,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 346822.8599999999,
+    "y0": -69105.37,
+    "x1": 360384.8599999999,
+    "y1": -63655.369999999995
+   },
+   {
+    "code": "07",
+    "no": 1,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 267409.55,
+    "y0": -87182.87,
+    "x1": 272809.55,
+    "y1": -77515.37
+   },
+   {
+    "code": "08",
+    "no": 1,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 267409.55,
+    "y0": -101132.87,
+    "x1": 294109.55,
+    "y1": -91282.87
+   },
+   {
+    "code": "09",
+    "no": 1,
+    "title": "HESAP TABLOLARI VE NOTLAR",
+    "fk": null,
+    "floor": "",
+    "x0": 267409.55,
+    "y0": -109817.87,
+    "x1": 272809.55,
+    "y1": -105232.87
+   }
+  ],
+  "summary": [
+   "Mimari: 2 kat, 28 mahal, kat kotlari ZK=+0.00, 1K=+3.50, bina yuksekligi 9.18 m",
+   "Elektrik: kurulu 326.4 kW, talep 211.3 kW, trafo 400 kVA, KMP 120 kVAr, jenerator 80 kVA",
+   "Aydinlatma: 255 armatur, 120 priz/cikis, 82 linye, 8 pano",
+   "Topraklama: R=0.84 ohm (birlesik), paratoner LPL II, 26 inis",
+   "Mekanik: VRF 57.4 kW ic unite, dis unite 45.0+8.0 kW",
+   "Sihhi: 36 armatur, 3 pis su kolonu, 27 yagmur inisi"
+  ],
+  "secs": 2.5
+ }
+}

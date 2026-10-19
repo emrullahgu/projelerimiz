@@ -1,0 +1,9 @@
+# AutoCAD drawings are larger than GitHub's 100 MB file limit; they are kept locally in Projeler/
+*.dwg
+*.bak
+*.dwl
+*.dwl2
+*.sv$
+plot.log
+__pycache__/
+*.pyc
